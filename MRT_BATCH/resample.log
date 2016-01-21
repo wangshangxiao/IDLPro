@@ -1,0 +1,135 @@
+SortProducts : Corner point falls outside the bounds of the input projection.  The rectangle will be bounded at -180 or 180 degrees latitude.
+******************************************************************************
+
+MODIS Mosaic Tool (v4.1 March 2009)
+Start Time:  Sat Feb 01 23:52:58 2014
+
+------------------------------------------------------------------
+
+Input filenames (20):
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h08v04.005.2014006075920.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h08v05.005.2014006075420.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h08v06.005.2014006075417.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h08v07.005.2014006075344.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h09v04.005.2014006075524.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h09v05.005.2014006075500.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h09v06.005.2014006075402.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h09v07.005.2014006075616.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h10v03.005.2014006075648.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h10v04.005.2014006075412.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h10v05.005.2014006075401.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h10v06.005.2014006075633.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h10v07.005.2014006075825.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h11v03.005.2014006075724.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h11v04.005.2014006075630.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h11v05.005.2014006075932.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h11v06.005.2014006080122.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h12v04.005.2014006080337.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h12v05.005.2014006075647.hdf
+   D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\MOD13A2.A2013353.h13v04.005.2014006084040.hdf
+Output filename: D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\out\A2013353.HDF
+Mosaic Array:
+   file[-9]  file[-9]  file[ 8]  file[13]  file[-9]  file[-9]
+   file[ 0]  file[ 4]  file[ 9]  file[14]  file[17]  file[19]
+   file[ 1]  file[ 5]  file[10]  file[15]  file[18]  file[-9]
+   file[ 2]  file[ 6]  file[11]  file[16]  file[-9]  file[-9]
+   file[ 3]  file[ 7]  file[12]  file[-9]  file[-9]  file[-9]
+
+Mosaic : processing band 1 km 16 days NDVI
+
+Output mosaic image info
+------------------------
+output image corners (lat/lon):
+    UL:  59.999999994612 -179.900000000000 
+    UR:  59.999999994612 -79.999999979791 
+    LL:  9.999999999105 -101.542661179179 
+    LR:  9.999999999105 -40.617064471673 
+
+output image corners (X-Y projection units):
+    UL:  -11119505.196667001000 6671703.117999999800 
+    UR:  -4447802.078666999900 6671703.117999999800 
+    LL:  -11119505.196667001000 1111950.519667000000 
+    LR:  -4447802.078666999900 1111950.519667000000 
+
+     band               type lines smpls pixsiz      min    max   fill
+  1) 1 km 16 days NDVI  INT16  6000  7200 926.6254  -2000  10000  -3000
+
+End Time:  Sat Feb 01 23:53:06 2014
+
+Finished mosaicking!
+
+******************************************************************************
+
+******************************************************************************
+
+MODIS Reprojection Tool (v4.1 March 2009)
+Start Time:  Sat Feb 01 23:55:08 2014
+
+------------------------------------------------------------------
+
+ReadHDFHeader : UL corner falls outside the bounds of the input projection. The rectangle will be bounded at -180 or 180 degrees longitude.
+Warning: ReadParameterFile : No Error
+     : Only 2 out of 1 bands were addressed (0 or 1) in the SPECTRAL_SUBSET field. The remaining bands will not be processed (assumed to be 0).
+
+Input image and reprojection info
+---------------------------------
+input_filename:          D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\out\A2013353.HDF
+output_filename:         D:\Modis\HDF\MODI13A2A2013353\NorthAmerica\out\A2013353.tif
+input_filetype:          HDF-EOS
+output_filetype:         GEOTIFF
+input_projection_type:   SIN
+input_datum:             WGS84
+output_projection_type:  GEO
+output_datum:            WGS84
+resampling_type:         BI
+input projection parameters:  6371007.18 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+output projection parameters: 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+
+bounded input image corners (lat/lon):
+    UL:  60.00 -179.90 
+    UR:  60.00 -80.00 
+    LL:  10.00 -101.54 
+    LR:  10.00 -40.62 
+
+input image spatial subset corners (lat/lon):
+    UL:  60.00 -160.00 
+    UR:  60.00 -52.20 
+    LL:  10.00 -160.00 
+    LR:  10.00 -52.20 
+
+     band          select   type lines smpls pixsiz      min    max   fill
+  1) 1 km 16 days NDVI   1  INT16  6000  7200 926.6254  -2000  10000  -3000
+
+
+SINUSOIDAL PROJECTION PARAMETERS:
+
+   Radius of Sphere:     6371007.181000 meters
+   Longitude of Center:     0.000000 degrees
+   False Easting:      0.000000 meters 
+   False Northing:     0.000000 meters 
+
+BIResample : processing band 1 km 16 days NDVI
+
+Output image info
+-----------------
+output image extents (lat/lon):
+    UL:  60.000000000000 -160.000000000000 
+    UR:  60.000000000000 -52.191709790000 
+    LL:  9.991686670000 -160.000000000000 
+    LR:  9.991686670000 -52.191709790000 
+
+output image extents (X-Y projection units):
+    UL:  -160.000000000000 60.000000000000 
+    UR:  -52.191709790000 60.000000000000 
+    LL:  -160.000000000000 9.991686670000 
+    LR:  -52.191709790000 9.991686670000 
+
+     band               type lines smpls pixsiz      min    max   fill
+  1) 1 km 16 days NDVI  INT16  6001 12937 0.0083  -2000  10000  -3000
+
+End Time:  Sat Feb 01 23:55:22 2014
+
+Finished processing!
+
+******************************************************************************
+
