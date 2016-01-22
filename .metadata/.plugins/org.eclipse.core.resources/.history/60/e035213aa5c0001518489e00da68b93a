@@ -2,17 +2,17 @@ Function getSubFoldersName,InputPath,ExtentionName
   
   Allfiles=FILE_SEARCH(InputPath,ExtentionName,/FOLD_CASE,count=count)
   FolerNameArrays = !NULL
-  ;æ”¶é›†æ‰€æœ‰ä¸ŠæœŸç›®å½•ï¼Œæ”¾åˆ°ä¸€ä¸ªæ•°ç»„ä¸­ï¼Œç”¨æ•°æ®åšå¾ªç¯è¿›è¡Œä¸‹é¢çš„æ‹¼æ¥æ‰§è¡Œ
+  ;ÊÕ¼¯ËùÓĞÉÏÆÚÄ¿Â¼£¬·Åµ½Ò»¸öÊı×éÖĞ£¬ÓÃÊı¾İ×öÑ­»·½øĞĞÏÂÃæµÄÆ´½ÓÖ´ĞĞ
   FOR k=0,count-1 DO BEGIN
-    ;å–å‡ºè·¯å¾„
+    ;È¡³öÂ·¾¶
     FullInPutPath= file_dirname(Allfiles[k])
     ;print,'FullInPutPath===:   '+FullInPutPath
 
-    ;å–å‡ºæ–‡ä»¶æ‰€åœ¨ç›®å½•çš„ä¸Šä¸€çº§ç›®å½•
+    ;È¡³öÎÄ¼şËùÔÚÄ¿Â¼µÄÉÏÒ»¼¶Ä¿Â¼
     SubDirs = strsplit(FullInPutPath,'\', /EXTRACT,  COUNT= FileCOUNT)
     ;print,'SubDirs===:   '+SubDirs
 
-    ;æå–ä¸Šä¸€çº§ç›®å½•åç§°
+    ;ÌáÈ¡ÉÏÒ»¼¶Ä¿Â¼Ãû³Æ
     Datedir = SubDirs[ FileCOUNT-2]
     ;print,'Datedir===:   '+Datedir
 
@@ -20,7 +20,7 @@ Function getSubFoldersName,InputPath,ExtentionName
     ;print,DatedirArray
 
   ENDFOR
-  ;å»æ‰æ•°ç»„ä¸­é‡å¤çš„åå­—
+  ;È¥µôÊı×éÖĞÖØ¸´µÄÃû×Ö
   FolerNameArrays=FolerNameArrays[uniq(FolerNameArrays)]
   ;print,'FolerNameArraysUniq:======  '+FolerNameArrays
   
@@ -31,14 +31,14 @@ END
 
 PRO MOSAICBATCH
   COMPILE_OPT IDL2
-  ; å¯åŠ¨ENVI 5.1
+  ; Æô¶¯ENVI 5.1
   e = ENVI()
   ;COMPILE_OPT idl2
 
   ;ENVI,/RESTORE_BASE_SAVE_FILES
   ;initialize ENVI in batch mode:
   ;ENVI_BATCH_INIT
-  ; é€‰æ‹©å¤šä¸ªæ–‡ä»¶
+  ; Ñ¡Ôñ¶à¸öÎÄ¼ş
 ;  files = DIALOG_PICKFILE(/MULTIPLE, $
 ;    TITLE = 'Select input scenes')
     
@@ -56,23 +56,23 @@ PRO MOSAICBATCH
     ;FullInPutPath= file_dirname(FileNames[Num])
     
     
-    ;å–å‡ºæ–‡ä»¶æ‰€åœ¨ç›®å½•çš„ä¸Šä¸€çº§ç›®å½•
+    ;È¡³öÎÄ¼şËùÔÚÄ¿Â¼µÄÉÏÒ»¼¶Ä¿Â¼
     ;SubDirs = strsplit(FullInPutPath,'\', /EXTRACT,  COUNT= FileCOUNT)
 
-    ;æå–ä¸Šä¸€çº§ç›®å½•åç§°
+    ;ÌáÈ¡ÉÏÒ»¼¶Ä¿Â¼Ãû³Æ
     ;Datedir = SubDirs[ FileCOUNT-2]
     
     subInputPath=!NULL
-    ;ç»„æˆæ–°çš„ç›®å½•ï¼Œåˆ°æ—¥æœŸ
+    ;×é³ÉĞÂµÄÄ¿Â¼£¬µ½ÈÕÆÚ
     subInputPath=inputPath+PATH_SEP()+DatedirArray[Num]
 
-    ;æœç´¢æ—¥æœŸç›®å½•ä¸‹æ‰€æœ‰æŒ‡å®šæ–‡ä»¶
+    ;ËÑË÷ÈÕÆÚÄ¿Â¼ÏÂËùÓĞÖ¸¶¨ÎÄ¼ş
     files=FILE_SEARCH(subInputPath,'*_rpc.tif',/FOLD_CASE,count=count)
     
     
       
     scenes = !NULL
-    ; å°†æ¯ä¸€ä¸ªRasteræ”¾åœ¨ä¸€ä¸ªScenesä¸­
+    ; ½«Ã¿Ò»¸öRaster·ÅÔÚÒ»¸öScenesÖĞ
     FOR i=0, N_ELEMENTS(files)-1 DO BEGIN
       raster = e.OpenRaster(files[i])
       scenes = [scenes, raster]
@@ -85,12 +85,12 @@ PRO MOSAICBATCH
     
     
     
-    ; è®¾ç½®è¾“å‡ºè·¯å¾„
+    ; ÉèÖÃÊä³öÂ·¾¶
     newFile = subInputPath+'\'+GF1+'_'+Datedir+'_Mosaic.tif'
     
-    print,Datedir,'      å¼€å§‹æ‹¼æ¥â€¦â€¦â€¦â€¦',newFile
+    print,Datedir,'      ¿ªÊ¼Æ´½Ó¡­¡­¡­¡­',newFile
     
-    ; åˆ›å»ºENVIMosaicRasterå¯¹è±¡
+    ; ´´½¨ENVIMosaicRaster¶ÔÏó
     mosaicRaster = ENVIMosaicRaster(scenes,           $
       background = 0,                                       $
       color_matching_method = 'histogram matching',  $
@@ -102,22 +102,22 @@ PRO MOSAICBATCH
   
       
     IF FILE_TEST(newFile) THEN FILE_DELETE, newFile
-    ; è¾“å‡ºé•¶åµŒç»“æœ
+    ; Êä³öÏâÇ¶½á¹û
 ;    mosaicRaster.Export, newFile, 'ENVI';'GeoTIFF';
 ;  
-;    ;ã€€ä¿å­˜æ¥è¾¹çº¿
+;    ;¡¡±£´æ½Ó±ßÏß
 ;    mosaicRaster.SAVESEAMPOLYGONS, newFile+'_seamline.shp'
 ;    
 ;    
 ;    vector = e.OpenVector(newFile+'_seamline.shp')
 ;  
-;    ; æ‰“å¼€å¹¶æ˜¾ç¤ºæ …æ ¼å’Œæ¥è¾¹çº¿
+;    ; ´ò¿ª²¢ÏÔÊ¾Õ¤¸ñºÍ½Ó±ßÏß
 ;    mosaicRaster = e.OpenRaster(newFile)
 ;    view = e.GetView()
 ;    layer = view.createlayer(mosaicRaster)
 ;    vlayer = view.createlayer(vector)
-;    print,Datedir,'     æ‹¼æ¥å®Œæ¯• !    ',newFile
+;    print,Datedir,'     Æ´½ÓÍê±Ï !    ',newFile
   ENDFOR
   envi_batch_exit
-  print,'å…¨éƒ¨å½±åƒæ‹¼æ¥å®Œæ¯•ï¼'
+  print,'È«²¿Ó°ÏñÆ´½ÓÍê±Ï£¡'
 END

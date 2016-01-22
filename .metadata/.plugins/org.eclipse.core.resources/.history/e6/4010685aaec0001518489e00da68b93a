@@ -44,7 +44,7 @@ PRO Task_rpcorthorectification
     
     
     ; DEM影像路径
-    DEMFile = 'C:\Program Files\Exelis\ENVI52\data\GMTED2010.jp2'
+    DEMFile = 'C:\Program Files\Exelis\ENVI51\data\GMTED2010.jp2'
     DEM = e.OpenRaster(DEMFile)
   
     ;

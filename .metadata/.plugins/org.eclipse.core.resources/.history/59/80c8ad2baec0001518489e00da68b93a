@@ -19,7 +19,7 @@ PRO Task_rpcorthorectification
   ; 启动ENVI5.1
   e = ENVI(/HEADLESS)
   
-  inputPath='D:\HXData'
+  inputPath='D:\77211356\Data\GF\HuBei\snj\GF1_WFV4_E110.6_N31.8_20150428_L1A0000776868'
   
   Files=FILE_SEARCH(inputPath,'*.tiff',/FOLD_CASE,count=count)
 
@@ -44,7 +44,7 @@ PRO Task_rpcorthorectification
     
     
     ; DEM影像路径
-    DEMFile = 'C:\Program Files\Exelis\ENVI52\data\GMTED2010.jp2'
+    DEMFile = 'C:\Program Files\Exelis\ENVI51\data\GMTED2010.jp2'
     DEM = e.OpenRaster(DEMFile)
   
     ;
