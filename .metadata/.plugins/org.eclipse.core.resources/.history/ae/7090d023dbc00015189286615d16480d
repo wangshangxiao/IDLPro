@@ -56,9 +56,9 @@ PRO Task_rpcorthorectification
     Task.DEM_IS_HEIGHT_ABOVE_ELLIPSOID = 0
     
     Task.Output_Pixel_Size = 16
-    ;Task.OUTPUT_INTERPOLATION_METHOD=2
+    Task.OUTPUT_INTERPOLATION_METHOD=2
     
-    outputfile=outPath+'\'+FILE_BASENAME(ImageFile,'.tiff',/FOLD_CASE)+'_rpc.dat'
+    outputfile=outPath+'\'+FILE_BASENAME(ImageFile,'.tiff',/FOLD_CASE)+'_rpc.tif'
     print,'第',i+1,'景      ',outputfile
     Task.OUTPUT_RASTER_URI = outputfile
   

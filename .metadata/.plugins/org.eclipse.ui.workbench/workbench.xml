@@ -11,9 +11,7 @@
 <coolbarLayout>
 <coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="211" y="56"/>
 <coolItem id="com.rsi.idldt.ui.textedit.toolbar" itemType="typeToolBarContribution" x="288" y="56"/>
-<coolItem id="com.rsi.idldt.ui.toolbar.debugTools" itemType="typeToolBarContribution" x="478" y="56"/>
-<coolItem id="group.editor" itemType="typeGroupMarker"/>
-<coolItem id="com.rsi.idldt.proeditor.ProEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="com.rsi.idldt.ui.toolbar.debugTools" itemType="typeToolBarContribution" x="458" y="56"/>
 </coolbarLayout>
 <page aggregateWorkingSetId="Aggregate for window 1453391895043" focus="true" label="工作空间 － IDL">
 <editors>
@@ -26,9 +24,9 @@
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" partName="Task_rpcorthorectification.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/Task_rpcorthorectification.pro" title="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/Task_rpcorthorectification.pro"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1314" selectionTopPixel="765"/>
+<editor activePart="true" focus="true" id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" partName="l8calibrate.pro" title="l8calibrate.pro" tooltip="D:\77211356\GitHub\IDLPro\BatchPro\l8calibrate.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" uri="file:/D:/77211356/GitHub/IDLPro/BatchPro/l8calibrate.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="360" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -44,9 +42,6 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="问题">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="问题">
-<expanded>
-<category IMemento.internal.id="警告（9 项）"/>
-</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -142,143 +137,107 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/Task_rpcorthorectification.pro"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/maskimg_byevf.pro"/>
 <editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" uri="file:/D:/77211356/GitHub/IDLPro/BatchPro/uncompressingbatch.pro"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/FileMosaic.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/ObjectTest/cal_fx.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/ObjectTest/rpc_ortho.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/DataPreprocess/cal_subset.pro"/>
+<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" uri="file:/D:/77211356/GitHub/IDLPro/BatchPro/l8calibrate.pro"/>
 </editors>
-<item historyLabel="FileMosaic.pro" index="3">
-<position info="not_deleted" x="771" y="22"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="421" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="1213" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="1263" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="1313" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="1374" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="12" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="92" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="1540" y="0"/>
-</item>
-<item historyLabel="FileMosaic.pro" index="3">
-<position info="not_deleted" x="987" y="51"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="1540" y="0"/>
-</item>
-<item historyLabel="maskimg_byevf.pro" index="1">
-<position info="not_deleted" x="0" y="126"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1542" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1635" y="0"/>
 </item>
-<item historyLabel="FileMosaic.pro" index="3">
+<item historyLabel="FileMosaic.pro" index="2">
 <position info="not_deleted" x="987" y="51"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1635" y="0"/>
 </item>
-<item historyLabel="FileMosaic.pro" index="3">
+<item historyLabel="FileMosaic.pro" index="2">
 <position info="not_deleted" x="987" y="51"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1635" y="0"/>
 </item>
-<item historyLabel="FileMosaic.pro" index="3">
+<item historyLabel="FileMosaic.pro" index="2">
 <position info="not_deleted" x="987" y="51"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1569" y="0"/>
 </item>
-<item historyLabel="FileMosaic.pro" index="3">
+<item historyLabel="FileMosaic.pro" index="2">
 <position info="not_deleted" x="987" y="51"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1569" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1540" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="842" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="628" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="877" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="950" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="709" y="0"/>
 </item>
 <item historyLabel="Task_rpcorthorectification.pro" index="0">
 <position info="not_deleted" x="1007" y="32"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="709" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1540" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1571" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="711" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1614" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="782" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="806" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="804" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="845" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="473" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1213" y="0"/>
 </item>
 <item historyLabel="Task_rpcorthorectification.pro" index="0">
 <position info="not_deleted" x="1039" y="0"/>
 </item>
-<item historyLabel="uncompressingbatch.pro" index="2">
+<item historyLabel="uncompressingbatch.pro" index="1">
 <position info="not_deleted" x="1276" y="9"/>
 </item>
 <item historyLabel="Task_rpcorthorectification.pro" index="0">
@@ -293,8 +252,44 @@
 <item historyLabel="Task_rpcorthorectification.pro" index="0">
 <position info="not_deleted" x="1221" y="0"/>
 </item>
-<item active="true" historyLabel="Task_rpcorthorectification.pro" index="0">
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1314" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1619" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
 <position info="not_deleted" x="1179" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1364" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1347" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1526" y="0"/>
+</item>
+<item historyLabel="cal_fx.pro" index="3">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1526" y="0"/>
+</item>
+<item historyLabel="rpc_ortho.pro" index="4">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1526" y="0"/>
+</item>
+<item historyLabel="cal_subset.pro" index="5">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="0">
+<position info="not_deleted" x="1526" y="0"/>
+</item>
+<item active="true" historyLabel="l8calibrate.pro" index="6">
+<position info="not_deleted" x="0" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -313,6 +308,15 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cal_subset.pro" tooltip="DataPreprocess/cal_subset.pro">
+<persistable path="/DataPreprocess/cal_subset.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="rpc_ortho.pro" tooltip="ObjectTest/rpc_ortho.pro">
+<persistable path="/ObjectTest/rpc_ortho.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cal_fx.pro" tooltip="ObjectTest/cal_fx.pro">
+<persistable path="/ObjectTest/cal_fx.pro"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="maskimg_byevf.pro" tooltip="BatchPro/maskimg_byevf.pro">
 <persistable path="/BatchPro/maskimg_byevf.pro"/>
 </file>
@@ -336,9 +340,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="example_rpcorthorectification.pro" tooltip="ObjectTest/example_rpcorthorectification.pro">
 <persistable path="/ObjectTest/example_rpcorthorectification.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="rpc_ortho.pro" tooltip="ObjectTest/rpc_ortho.pro">
-<persistable path="/ObjectTest/rpc_ortho.pro"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="auto_warp.pro" tooltip="BatchPro/auto_warp.pro">
 <persistable path="/BatchPro/auto_warp.pro"/>

@@ -46,7 +46,7 @@ END
 Pro UnCompressingBatch
   
   ;the data folder
-  inputPath='D:\HXData\TM'
+  inputPath='D:\HXData'
   ;ExtensionName filter
   ExtensionName='*.tar.gz'
   ;get all the Compressed files
