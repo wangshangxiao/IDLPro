@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="删除 2 个资源" deleteContents="false" description="删除 2 个资源" element1="/fileBandMix/fileBandMix.BAK" element2="/fileBandMix/fileBandMix.prj" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="2" stamp="1453649351709"/>
+</session>
