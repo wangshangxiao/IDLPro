@@ -11,19 +11,33 @@
 <coolbarLayout>
 <coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="211" y="56"/>
 <coolItem id="com.rsi.idldt.ui.textedit.toolbar" itemType="typeToolBarContribution" x="288" y="56"/>
-<coolItem id="com.rsi.idldt.ui.toolbar.debugTools" itemType="typeToolBarContribution" x="478" y="56"/>
-<coolItem id="group.editor" itemType="typeGroupMarker"/>
-<coolItem id="com.rsi.idldt.proeditor.ProEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="com.rsi.idldt.ui.toolbar.debugTools" itemType="typeToolBarContribution" x="458" y="56"/>
 </coolbarLayout>
 <page aggregateWorkingSetId="Aggregate for window 1453391895043" focus="true" label="工作空间 － IDL">
 <editors>
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor activePart="true" focus="true" id="com.rsi.idldt.proeditor.ProEditor" name="quac_bath.pro" partName="quac_bath.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/quac_bath.pro" title="quac_bath.pro" tooltip="BatchPro/quac_bath.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/quac_bath.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="40" selectionTopPixel="0"/>
+</editor>
+<editor id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" partName="Task_rpcorthorectification.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/Task_rpcorthorectification.pro" title="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/Task_rpcorthorectification.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="19" selectionOffset="483" selectionTopPixel="912"/>
+</editor>
+<editor id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" partName="l8calibrate.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/l8calibrate.pro" title="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/l8calibrate.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="964" selectionTopPixel="499"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.ui.navigator.ProjectExplorer" partName="项目资源管理器">
@@ -39,7 +53,7 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="问题">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="问题">
 <expanded>
-<category IMemento.internal.id="警告（9 项）"/>
+<category IMemento.internal.id="警告（61 项）"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -56,7 +70,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="com.rsi.idldt.ui.IDLPerspective">
+<perspectives activePart="com.rsi.idldt.proeditor.ProEditor" activePerspective="com.rsi.idldt.ui.IDLPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="com.rsi.idldt.internal.ui.IDLPerspectiveFactory" id="com.rsi.idldt.ui.IDLPerspective" label="IDL"/>
 <alwaysOnActionSet id="com.rsi.idldt.tasks.actionSets.Wizard"/>
@@ -135,7 +149,164 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" uri="file:/D:/77211356/GitHub/IDLPro/BatchPro/quac_bath.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/quac_bath.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/Task_rpcorthorectification.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/l8calibrate.pro"/>
+</editors>
+<item historyLabel="quac_bath.pro" index="0">
+<position info="not_deleted" x="631" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="389" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="l8calibrate.pro" index="3">
+<position info="not_deleted" x="729" y="10"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="265" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="633" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="483" y="19"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="63" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="633" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="331" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="633" y="0"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="640" y="7"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="645" y="0"/>
+</item>
+<item historyLabel="l8calibrate.pro" index="3">
+<position info="not_deleted" x="729" y="10"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="483" y="19"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="483" y="19"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="483" y="19"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="483" y="19"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="Task_rpcorthorectification.pro" index="2">
+<position info="not_deleted" x="483" y="19"/>
+</item>
+<item historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+<item historyLabel="l8calibrate.pro" index="3">
+<position info="not_deleted" x="964" y="0"/>
+</item>
+<item active="true" historyLabel="quac_bath.pro" index="1">
+<position info="not_deleted" x="40" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -152,6 +323,18 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro">
+<persistable path="/BatchPro/l8calibrate.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro">
+<persistable path="/BatchPro/Task_rpcorthorectification.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="uncompressingbatch.pro" tooltip="BatchPro/uncompressingbatch.pro">
+<persistable path="/BatchPro/uncompressingbatch.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="auto_warp.pro" tooltip="BatchPro/auto_warp.pro">
+<persistable path="/BatchPro/auto_warp.pro"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cartprocessing__define.pro" tooltip="BatchPro/cartprocessing__define.pro">
 <persistable path="/BatchPro/cartprocessing__define.pro"/>
 </file>
@@ -184,18 +367,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="HJ_DN2RAD.pro" tooltip="BatchPro/HJ_DN2RAD.pro">
 <persistable path="/BatchPro/HJ_DN2RAD.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="dn_radia_atm_cor_zyb2.pro" tooltip="BatchPro/dn_radia_atm_cor_zyb2.pro">
-<persistable path="/BatchPro/dn_radia_atm_cor_zyb2.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cal_calibration.pro" tooltip="BatchPro/cal_calibration.pro">
-<persistable path="/BatchPro/cal_calibration.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro">
-<persistable path="/BatchPro/Task_rpcorthorectification.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="uncompressingbatch.pro" tooltip="BatchPro/uncompressingbatch.pro">
-<persistable path="/BatchPro/uncompressingbatch.pro"/>
 </file>
 </mruList>
 </workbench>
