@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>General</title></head>
+<body>&nbsp;&nbsp;&nbsp; <a href="../../Reference%20Guide.html"><img style="border: 0px solid ; width: 200px; height: 130px;" alt="Colibri" title="Colibri" src="../Logo/Colibri_full.png"></a><h1 style="color: rgb(0, 0, 120); margin-left: 80px;">General&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</h1><hr style="width: 100%; height: 2px;"><span style="font-weight: bold;"><br></span>Colibri
+is a repository for source code developed in&nbsp;<a href="http://www.exelisvis.com/Company/Home.aspx">ENVI/IDL</a> under the <a href="http://opensource.org/">Open Source Initiative</a>. It contains a wide variety of algorithms
+and applications which are of interest for the remote sensing community.<br><br>The
+code is organized in a hierarchical way. At the lowest level, common
+code performing all kinds of basic functionality is available to the
+higher levels, i.e. classes and applications. Classes are object based
+functionalities performing more specific tasks. Both common code and
+classes are the building blocks for the applications which perform well
+delineated tasks. <br>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <img style="width: 505px; height: 333px;" alt="Overview" title="Overview" src="Images/Overview.png">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; <br><br>All
+common code, classes and applications are well documented. The complete
+set of code and documentation are available to the remote sensing
+community.<br><br>Common code and classes distinguish between IDL based
+and ENVI functionality. The IDL based functionality is not limited to
+the ENVI environment and therefore can be used outside the remote
+sensing applications. The applications distinguish between command line
+applications and applications which are driven by a Graphical User
+Interface (GUI). The GUI based applications can be made available via
+the ENVI main menu or via the Toolbox environment as of ENVI version
+5.0.<br><h2 style="color: rgb(0, 0, 120);">Overview of the E/I-OSI syntax.</h2><p jquery180024303414120564598="152">It is the intention to have a strict naming 
+convention for the source code names:</p>
+<blockquote jquery180024303414120564598="153">
+<ul jquery180024303414120564598="154"><li jquery180024303414120564598="155">ENVI based functionalities start with the 
+prefix <strong jquery180024303414120564598="156"><em jquery180024303414120564598="157">EOS</em></strong></li><li jquery180024303414120564598="158">IDL based functionalitIES start with prefix 
+<strong jquery180024303414120564598="159"><em jquery180024303414120564598="160">IOS</em></strong></li></ul></blockquote>
+<p jquery180024303414120564598="161">Depending on the code level the prefix is 
+followed by:</p>
+<blockquote jquery180024303414120564598="162">
+<ul jquery180024303414120564598="163"><li jquery180024303414120564598="164"><strong jquery180024303414120564598="165"><em jquery180024303414120564598="166">cc</em></strong> for common code</li><li jquery180024303414120564598="167"><strong jquery180024303414120564598="168"><em jquery180024303414120564598="169">oc</em></strong> for object classes</li><li jquery180024303414120564598="170"><strong jquery180024303414120564598="171"><em jquery180024303414120564598="172">ap</em></strong> for 
+applications</li><li jquery180024303414120564598="170"><span style="font-weight: bold; font-style: italic;">ex</span> for example code </li></ul></blockquote>
+<p jquery180024303414120564598="173">Subsequently the specific source name is 
+added, e.g. <strong jquery180024303414120564598="174"><em jquery180024303414120564598="175">IOSocStatus</em></strong>, the IDL-based object class used to manage the status information window.&nbsp;</p><h2 style="color: rgb(0, 0, 120);">E/I-OSI syntax.</h2><p>The
+syntax used is identical to those used in the ENVI and IDL manuals. A
+brief overview is listed below. A detailed description of the syntax
+can be found in the ENVI and IDL manuals.</p><table id="wp983430table983220" border="0" cellpadding="4" cellspacing="1"><tbody><tr align="middle" bgcolor="#d5d5de">
+<th><a shape="rect" name="wp983222"></a>
+<div class="pCellHeading">Element </div></th>
+<th><a shape="rect" name="wp983224"></a>
+<div class="pCellHeading">Description </div></th></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983226"></a>
+<p class="pCellBody">[ ] (Square brackets) </p></td>
+<td><a shape="rect" name="wp983228"></a>
+<p class="pCellBody">Indicates that the contents are optional. Do not include the 
+brackets in your call. </p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983230"></a>
+<p class="pCellBody"><i>[ ]</i> (Italicized square brackets) </p></td>
+<td><a shape="rect" name="wp983232"></a>
+<p class="pCellBody">Indicates that the square brackets are part of the statement 
+(used to define an array). </p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983234"></a>
+<p class="pCellBody">Argument </p></td>
+<td><a shape="rect" name="wp983236"></a>
+<p class="pCellBody">Arguments are shown in italics, and must be specified in the 
+order listed. </p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983238"></a>
+<p class="pCellBody">KEYWORD </p></td>
+<td><a shape="rect" name="wp983240"></a>
+<p class="pCellBody">Keywords are all caps, and can be specified in any order. For 
+functions, all arguments and keywords must be contained within parentheses. 
+</p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983242"></a>
+<p class="pCellBody">/KEYWORD </p></td>
+<td><a shape="rect" name="wp983244"></a>
+<p class="pCellBody">Indicates a boolean keyword. </p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983246"></a>
+<p class="pCellBody"><i>Italics</i> </p></td>
+<td><a shape="rect" name="wp983248"></a>
+<p class="pCellBody">Indicates arguments, expressions, or statements for which you 
+must provide values. </p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983250"></a>
+<p class="pCellBody">{ } (Braces) </p></td>
+<td>
+<div class="pSmartList1">
+<ul class="pSmartList1"><a shape="rect" name="wp983252"></a><div class="pSmartList1">
+<li>Indicates that you must choose one of the values they contain</li></div><a shape="rect" name="wp983253"></a><div class="pSmartList1">
+<li>Encloses a list of possible values, separated by vertical lines ( | 
+)</li></div><a shape="rect" name="wp983254"></a><div class="pSmartList1">
+<li>Encloses useful information about a keyword</li></div><a shape="rect" name="wp983255"></a><div class="pSmartList1">
+<li>Defines an IDL structure (this is the only case in which the braces are 
+included in the call).</li></div></ul></div></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983257"></a>
+<p class="pCellBody">| (Vertical lines) </p></td>
+<td><a shape="rect" name="wp983259"></a>
+<p class="pCellBody">Separates multiple values or keywords. </p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983261"></a>
+<p class="pCellBody">[,&nbsp;<i>Value</i><sub class="cSubscriptItalic">1</sub>, ... , 
+<i>Value</i><sub class="cSubscriptItalic">n</sub>] </p></td>
+<td><a shape="rect" name="wp983263"></a>
+<p class="pCellBody">Indicates that any number of values can be specified. 
+</p></td></tr>
+<tr bgcolor="#e2e2e2">
+<td><a shape="rect" name="wp983265"></a>
+<p class="pCellBody">[,&nbsp;<i>Value</i><sub class="cSubscriptItalic">1</sub>, ... , 
+<i>Value</i><sub class="cSubscriptItalic">8</sub>] </p></td>
+<td><a shape="rect" name="wp983267"></a>
+<p class="pCellBody">Indicates the maximum number of values that can be specified. 
+</p></td></tr></tbody></table></body></html>

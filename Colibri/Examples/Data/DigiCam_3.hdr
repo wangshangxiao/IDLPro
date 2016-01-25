@@ -1,0 +1,21 @@
+ENVI
+description = {
+  Create New File Result [Fri Nov 16 15:01:25 2012]}
+samples = 500
+lines   = 250
+bands   = 4
+header offset = 0
+file type = ENVI Standard
+data type = 1
+interleave = bsq
+sensor type = Unknown
+byte order = 0
+y start = 501
+map info = {Lambert Conformal Conic, 1.0000, 1.0000, 155061.0000, 232331.0000, 1.0000000000e+000, 1.0000000000e+000, WGS-84, units=Meters}
+projection info = {4, 6378137.0, 6356752.3, 90.000000, 4.367487, 150000.0, 5400088.4, 49.833334, 51.166667, WGS-84, Lambert Conformal Conic, units=Meters}
+coordinate system string = {PROJCS["Lambert_Conformal_Conic",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Lambert_Conformal_Conic"],PARAMETER["False_Easting",150000.0],PARAMETER["False_Northing",5400088.4],PARAMETER["Central_Meridian",4.367487],PARAMETER["Standard_Parallel_1",49.833334],PARAMETER["Standard_Parallel_2",51.166667],PARAMETER["Scale_Factor",1.0],PARAMETER["Latitude_Of_Origin",90.0],UNIT["Meter",1.0]]}
+wavelength units = Unknown
+pixel size = {1.00000000e+000, 1.00000000e+000, units=Meters}
+band names = {
+ Resize (Band 1:Im1002), Resize (Band 2:Im1002), Resize (Band 3:Im1002), 
+ Resize (Band 4:Im1002)}

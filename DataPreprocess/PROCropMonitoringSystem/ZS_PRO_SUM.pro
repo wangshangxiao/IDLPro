@@ -1,0 +1,1171 @@
+;
+; 蒙继华
+; 20060824省级农情遥感监测系统中的汇总模块
+; 在原来全国长势遥感监测系统的基础上修改而成
+;-----------------------------------------------------------------
+
+FUNCTION ZS_COUNT_STA_PRO_ABOVE_COUNTY,RANGE_NAME,RANGE_CODE,YEAR,MONTH,DAY,DATA_TYPE,SCALE,$
+                           SENSOR_CODE,PERIOD
+    ;*************************************************************************************
+    ;这是系统的主要函数,根据不同的尺度选择了不同的表进行查询
+    ;*************************************************************************************
+    on_error,2
+
+    COMMON COMMON_BLOCK,yesORno,DBobj,FILE_PATH,Year_1,DSN,USER_NAME,PWD,PROVINCE_CODE
+    ;获取传递过来的参数
+    RANGE_NAME=RANGE_NAME
+    RANGE_CODE=RANGE_CODE
+    YEAR=YEAR
+    MONTH=MONTH
+    DAY=DAY
+    DATA_TYPE=STRTRIM(DATA_TYPE,2)
+    OD=DBobj
+    SCALE=SCALE
+    IF(DATA_TYPE EQ 'NDVI') THEN DATA_TYPE='NDVI_H'
+
+    ;这个年用来表示数据库中最新的作物面积数据,目前使用的是2004年的
+    YEAR_GVG='2004'
+
+    AREA_PLOWLAND_TOTAL     =0.0
+    AREA_PADDY_FIELD_TOTAL    =0.0
+    AREA_DRY_LAND_TOTAL     =0.0
+    AREA_SPRING_WHEAT_TOTAL   =0.0
+    AREA_WINTER_WHEAT_TOTAL   =0.0
+    AREA_EARLY_RICE_TOTAL =0.0
+    AREA_SEMILATE_RICE_TOTAL=0.0
+    AREA_LATE_RICE_TOTAL  =0.0
+    AREA_CORN_TOTAL   =0.0
+    AREA_SOYBEAN_TOTAL       =0.0
+
+    ADD_UP_PLOWLAND       =0.0
+    ADD_UP_PADDY_FIELD =0.0
+    ADD_UP_DRY_LAND       =0.0
+
+    ADD_UP_WINTER_WHEAT    =0.0
+    ADD_UP_SPRING_WHEAT    =0.0
+
+    ADD_UP_EARLY_RICE =0.0
+    ADD_UP_SEMILATE_RICE=0.0
+    ADD_UP_LATE_RICE  =0.0
+    ADD_UP_CORN   =0.0
+    ADD_UP_SOYBEAN       =0.0
+
+    ;构建一个SQL语句
+    ;*******************************************************************************************
+
+    ;*******************************************************************************
+    ;modified 20070607
+    ;PROVINCE_CODE='230000'
+    IF(SCALE EQ '全省') THEN BEGIN
+		RANGE_CODE=PROVINCE_CODE
+      ;**********************************************************************
+      ;(1)先处理耕地\水田\和旱地的,(在两行星中间)
+       SQL='SELECT T1.PLOWLAND,T1.PADDY_FIELD,T1.DRY_LAND,'
+       SQL=SQL+'T2.avg_plowland,T2.avg_paddy_field,T2.avg_dry_land '
+       SQL=SQL+'FROM PLOWLAND_AREA_COUNTY T1,PARAMETER_PROCESS_COUNTY T2 '
+      SQL=SQL+' WHERE (T2.COUNTY_CODE IN '
+      SQL=SQL+'(SELECT CODE FROM COUNTY_CODE WHERE PROVINCE_CODE = '
+      SQL=SQL+"'"+PROVINCE_CODE+"'"+')) AND '
+
+       SQL=SQL+'(T1.COUNTY_CODE=T2.COUNTY_CODE) '
+       SQL=SQL+'AND (T2.YEAR='+STRTRIM(YEAR,2)+') '
+       SQL=SQL+'AND (T2.MONTH='+STRTRIM(MONTH,2)+') '
+       SQL=SQL+'AND (T2.DAY='+STRTRIM(DAY,2)+')'
+
+       SQL=SQL+' AND (T2.periods='+period+') '
+       SQL=SQL+' AND (T2.DATA_TYPE='+"'"+STRTRIM(DATA_TYPE,2)+"'"+') '
+       SQL=SQL+'AND (T2.SENSOR_CODE='+"'"+SENSOR_CODE+"'"+') '
+      PRINT,'SQL1',SQL
+
+       ORS = OBJ_NEW('IDLDBRECORDSET', OD, SQL=SQL)
+       NUM_OF_COUNTY=1
+       IF(ORS->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+
+         REPEAT  BEGIN
+          NUM_OF_COUNTY=NUM_OF_COUNTY+1
+          AREA_PLOWLAND     =    FLOAT(ORS->GETFIELD(0))
+          AREA_PADDY_FIELD    =  FLOAT(ORS->GETFIELD(1))
+          AREA_DRY_LAND     =    FLOAT(ORS->GETFIELD(2))
+          VALUE_PLOWLAND   =   FLOAT(ORS->GETFIELD(3))
+          VALUE_PADDY_FIELD   = FLOAT(ORS->GETFIELD(4))
+          VALUE_DRY_LAND   =   FLOAT(ORS->GETFIELD(5))
+
+          ;PRINT,LAND_TYPE,AVG_VALUE,AREA
+          IF(VALUE_PLOWLAND NE 0) THEN BEGIN
+              AREA_PLOWLAND_TOTAL=AREA_PLOWLAND+AREA_PLOWLAND_TOTAL
+              ADD_UP_PLOWLAND=ADD_UP_PLOWLAND+AREA_PLOWLAND*VALUE_PLOWLAND
+          ENDIF
+          IF(VALUE_PADDY_FIELD NE 0) THEN BEGIN
+              AREA_PADDY_FIELD_TOTAL=AREA_PADDY_FIELD+AREA_PADDY_FIELD_TOTAL
+              ADD_UP_PADDY_FIELD=ADD_UP_PADDY_FIELD+AREA_PADDY_FIELD*VALUE_PADDY_FIELD
+          ENDIF
+          IF(VALUE_DRY_LAND NE 0) THEN BEGIN
+              AREA_DRY_LAND_TOTAL=AREA_DRY_LAND+AREA_DRY_LAND_TOTAL
+              ADD_UP_DRY_LAND=ADD_UP_DRY_LAND+AREA_DRY_LAND*VALUE_DRY_LAND
+          ENDIF
+         ENDREP UNTIL (ORS->MOVECURSOR(/NEXT) NE 1)
+       ENDIF
+       OBJ_DESTROY,ORS
+      ;**********************************************************************
+      ;**********************************************************************
+      ;*******************************************************************************
+       ;(2)再处理分作物的数值(也是在两行星之间)
+       ;也是分NDVI和非NDVI两种情况,与前面耕地\水田\旱地的处理方法相同
+       SQL='SELECT '
+       SQL=SQL+'T1.WINTER_WHEAT,'
+       SQL=SQL+'T1.SPRING_WHEAT,'
+       SQL=SQL+'T1.EARLY_RICE,'
+       SQL=SQL+'T1.SEMILATE_RICE,'
+       SQL=SQL+'T1.LATE_RICE,'
+       ;SQL=SQL+'T1.CORN,'
+       ;由于原来的作物玉米分为了夏玉米和夏玉米,
+       ;故对原来的SQL语句进行了修改
+       ;修改于,2007.03.22,MJH
+       SQL=SQL+'T1.SUMMER_CORN+SPRING_CORN,'
+       SQL=SQL+'T1.SOYBEAN,'
+
+       SQL=SQL+'T2.AVG_WINTER_WHEAT,'
+       SQL=SQL+'T2.AVG_SPRING_WHEAT,'
+       SQL=SQL+'T2.AVG_EARLY_RICE,'
+       SQL=SQL+'T2.AVG_SEMILATE_RICE,'
+       SQL=SQL+'T2.AVG_LATE_RICE,'
+       SQL=SQL+'T2.AVG_MAIZE,'
+       SQL=SQL+'T2.AVG_SOYBEAN '
+
+       SQL=SQL+'FROM CROP_AREA_COUNTY T1,PARAMETER_PROCESS_COUNTY T2 '
+       SQL=SQL+' WHERE (T2.COUNTY_CODE IN '
+      SQL=SQL+'(SELECT CODE FROM COUNTY_CODE WHERE PROVINCE_CODE = '
+      SQL=SQL+"'"+PROVINCE_CODE+"'"+')) AND '
+
+      SQL=SQL+'(T1.COUNTY_CODE=T2.COUNTY_CODE) '
+      SQL=SQL+'AND (T1.YEAR='+YEAR_GVG+') '
+       SQL=SQL+'AND (T2.YEAR='+STRTRIM(YEAR,2)+') '
+       SQL=SQL+'AND (T2.MONTH='+STRTRIM(MONTH,2)+') '
+       SQL=SQL+'AND (T2.DAY='+STRTRIM(DAY,2)+')'
+
+       SQL=SQL+' AND (T2.periods='+period+') '
+       SQL=SQL+' AND (T2.DATA_TYPE='+"'"+STRTRIM(DATA_TYPE,2)+"'"+') '
+       SQL=SQL+'AND (T2.SENSOR_CODE='+"'"+SENSOR_CODE+"'"+') '
+       ;SQL=SQL+'ORDER BY YEAR,MONTH,DAY'
+      PRINT,'SQL2',SQL
+
+      ORS = OBJ_NEW('IDLDBRECORDSET', OD, SQL=SQL)
+       NUM_OF_COUNTY=1
+       IF(ORS->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+
+         WHILE (ORS->MOVECURSOR(/NEXT) EQ 1) DO BEGIN
+          NUM_OF_COUNTY=NUM_OF_COUNTY+1
+          AREA_WINTER_WHEAT   = FLOAT(ORS->GETFIELD(0))
+          AREA_SPRING_WHEAT   = FLOAT(ORS->GETFIELD(1))
+          AREA_EARLY_RICE     =  FLOAT(ORS->GETFIELD(2))
+          AREA_SEMILATE_RICE  =    FLOAT(ORS->GETFIELD(3))
+          AREA_LATE_RICE   =   FLOAT(ORS->GETFIELD(4))
+          AREA_CORN      =   FLOAT(ORS->GETFIELD(5))
+          AREA_SOYBEAN       = FLOAT(ORS->GETFIELD(6))
+
+          VALUE_WINTER_WHEAT  =    FLOAT(ORS->GETFIELD(7))
+          VALUE_SPRING_WHEAT  =    FLOAT(ORS->GETFIELD(8))
+          VALUE_EARLY_RICE    =  FLOAT(ORS->GETFIELD(9))
+          VALUE_SEMILATE_RICE =   FLOAT(ORS->GETFIELD(10))
+          VALUE_LATE_RICE     =  FLOAT(ORS->GETFIELD(11))
+          VALUE_CORN       =  FLOAT(ORS->GETFIELD(12))
+          VALUE_SOYBEAN     =    FLOAT(ORS->GETFIELD(13))
+
+          IF(VALUE_WINTER_WHEAT NE 0) THEN BEGIN
+              AREA_WINTER_WHEAT_TOTAL=AREA_WINTER_WHEAT+AREA_WINTER_WHEAT_TOTAL
+              ADD_UP_WINTER_WHEAT=ADD_UP_WINTER_WHEAT+AREA_WINTER_WHEAT*VALUE_WINTER_WHEAT
+          ENDIF
+          IF(VALUE_SPRING_WHEAT NE 0) THEN BEGIN
+              AREA_SPRING_WHEAT_TOTAL=AREA_SPRING_WHEAT+AREA_SPRING_WHEAT_TOTAL
+              ADD_UP_SPRING_WHEAT=ADD_UP_SPRING_WHEAT+AREA_SPRING_WHEAT*VALUE_SPRING_WHEAT
+          ENDIF
+          IF(VALUE_EARLY_RICE NE 0) THEN BEGIN
+              AREA_EARLY_RICE_TOTAL=AREA_EARLY_RICE+AREA_EARLY_RICE_TOTAL
+              ADD_UP_EARLY_RICE=ADD_UP_EARLY_RICE+AREA_EARLY_RICE*VALUE_EARLY_RICE
+          ENDIF
+          IF(VALUE_SEMILATE_RICE NE 0) THEN BEGIN
+              AREA_SEMILATE_RICE_TOTAL=AREA_SEMILATE_RICE+AREA_SEMILATE_RICE_TOTAL
+              ADD_UP_SEMILATE_RICE=ADD_UP_SEMILATE_RICE+AREA_SEMILATE_RICE*VALUE_SEMILATE_RICE
+          ENDIF
+          IF(VALUE_LATE_RICE NE 0) THEN BEGIN
+              AREA_LATE_RICE_TOTAL=AREA_LATE_RICE+AREA_LATE_RICE_TOTAL
+              ADD_UP_LATE_RICE=ADD_UP_LATE_RICE+AREA_LATE_RICE*VALUE_LATE_RICE
+          ENDIF
+          IF(VALUE_CORN NE 0) THEN BEGIN
+              AREA_CORN_TOTAL=AREA_CORN+AREA_CORN_TOTAL
+              ADD_UP_CORN=ADD_UP_CORN+AREA_CORN*VALUE_CORN
+          ENDIF
+
+          IF(VALUE_SOYBEAN NE 0) THEN BEGIN
+              AREA_SOYBEAN_TOTAL=AREA_SOYBEAN+AREA_SOYBEAN_TOTAL
+              ADD_UP_SOYBEAN=ADD_UP_SOYBEAN+AREA_SOYBEAN*VALUE_SOYBEAN
+          ENDIF
+         ENDWHILE
+       ENDIF
+
+    ;**********************************************************************
+    ;处理省尺度以外的情况(自定义监测区)
+    ;**********************************************************************
+    ENDIF ELSE BEGIN
+
+      ;(1)先处理耕地\水田\和旱地的,(在两行星中间)
+       SQL='SELECT T1.PLOWLAND,T1.PADDY_FIELD,T1.DRY_LAND,'
+       SQL=SQL+'T2.avg_plowland,T2.avg_paddy_field,T2.avg_dry_land '
+       SQL=SQL+'FROM PLOWLAND_AREA_COUNTY T1,PARAMETER_PROCESS_COUNTY T2 '
+      SQL=SQL+' WHERE (T2.COUNTY_CODE IN '
+      SQL=SQL+'(SELECT COUNTY_CODE FROM COUNTY_TO_ROI WHERE ROI_CODE = '
+      SQL=SQL+"'"+RANGE_CODE+"'"+')) AND '
+
+       SQL=SQL+'(T1.COUNTY_CODE=T2.COUNTY_CODE) '
+       SQL=SQL+'AND (T2.YEAR='+STRTRIM(YEAR,2)+') '
+       SQL=SQL+'AND (T2.MONTH='+STRTRIM(MONTH,2)+') '
+       SQL=SQL+'AND (T2.DAY='+STRTRIM(DAY,2)+')'
+
+       SQL=SQL+' AND (T2.periods='+period+') '
+       SQL=SQL+' AND (T2.DATA_TYPE='+"'"+STRTRIM(DATA_TYPE,2)+"'"+') '
+       SQL=SQL+'AND (T2.SENSOR_CODE='+"'"+SENSOR_CODE+"'"+') '
+
+      PRINT,'SQL20050128',SQL
+
+      ORS = OBJ_NEW('IDLDBRECORDSET', OD, SQL=SQL)
+       NUM_OF_COUNTY=1
+       IF(ORS->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+
+         WHILE (ORS->MOVECURSOR(/NEXT) EQ 1) DO BEGIN
+          NUM_OF_COUNTY=NUM_OF_COUNTY+1
+          AREA_PLOWLAND     =    FLOAT(ORS->GETFIELD(0))
+          AREA_PADDY_FIELD    =  FLOAT(ORS->GETFIELD(1))
+          AREA_DRY_LAND     =    FLOAT(ORS->GETFIELD(2))
+          VALUE_PLOWLAND   =   FLOAT(ORS->GETFIELD(3))
+          VALUE_PADDY_FIELD   = FLOAT(ORS->GETFIELD(4))
+          VALUE_DRY_LAND   =   FLOAT(ORS->GETFIELD(5))
+
+          ;PRINT,LAND_TYPE,AVG_VALUE,AREA
+          IF(VALUE_PLOWLAND NE 0) THEN BEGIN
+              AREA_PLOWLAND_TOTAL=AREA_PLOWLAND+AREA_PLOWLAND_TOTAL
+              ADD_UP_PLOWLAND=ADD_UP_PLOWLAND+AREA_PLOWLAND*VALUE_PLOWLAND
+          ENDIF
+          IF(VALUE_PADDY_FIELD NE 0) THEN BEGIN
+              AREA_PADDY_FIELD_TOTAL=AREA_PADDY_FIELD+AREA_PADDY_FIELD_TOTAL
+              ADD_UP_PADDY_FIELD=ADD_UP_PADDY_FIELD+AREA_PADDY_FIELD*VALUE_PADDY_FIELD
+          ENDIF
+          IF( VALUE_DRY_LAND NE 0) THEN BEGIN
+              AREA_DRY_LAND_TOTAL=AREA_DRY_LAND+AREA_DRY_LAND_TOTAL
+              ADD_UP_DRY_LAND=ADD_UP_DRY_LAND+AREA_DRY_LAND*VALUE_DRY_LAND
+          ENDIF
+         ENDWHILE
+       ENDIF
+       OBJ_DESTROY,ORS
+       ;*******************************************************************************
+       ;*******************************************************************************
+       ;(2)再处理分作物的数值(也是在两行星之间)
+       ;也是分NDVI和非NDVI两种情况,与前面耕地\水田\旱地的处理方法相同
+       SQL='SELECT '
+       SQL=SQL+'T1.WINTER_WHEAT,'
+       SQL=SQL+'T1.SPRING_WHEAT,'
+       SQL=SQL+'T1.EARLY_RICE,'
+       SQL=SQL+'T1.SEMILATE_RICE,'
+       SQL=SQL+'T1.LATE_RICE,'
+       ;SQL=SQL+'T1.CORN,'
+       SQL=SQL+'T1.SPRING_CORN+T1.SUMMER_CORN,'
+       SQL=SQL+'T1.SOYBEAN,'
+
+       SQL=SQL+'T2.AVG_PLOWLAND,'
+       SQL=SQL+'T2.AVG_PADDY_FIELD,'
+       SQL=SQL+'T2.AVG_DRY_LAND '
+
+       SQL=SQL+'FROM CROP_AREA_COUNTY T1,PARAMETER_PROCESS_COUNTY T2 '
+       SQL=SQL+' WHERE (T2.COUNTY_CODE IN '
+      SQL=SQL+'(SELECT COUNTY_CODE FROM COUNTY_TO_ROI WHERE ROI_CODE = '
+      SQL=SQL+"'"+RANGE_CODE+"'"+')) AND '
+
+      SQL=SQL+'(T1.COUNTY_CODE=T2.COUNTY_CODE) '
+      SQL=SQL+'AND (T1.YEAR='+YEAR_GVG+') '
+       SQL=SQL+'AND (T2.YEAR='+STRTRIM(YEAR,2)+') '
+       SQL=SQL+'AND (T2.MONTH='+STRTRIM(MONTH,2)+') '
+       SQL=SQL+'AND (T2.DAY='+STRTRIM(DAY,2)+')'
+
+       SQL=SQL+' AND (T2.periods='+period+') '
+       SQL=SQL+' AND (T2.DATA_TYPE='+"'"+STRTRIM(DATA_TYPE,2)+"'"+') '
+       SQL=SQL+'AND (T2.SENSOR_CODE='+"'"+SENSOR_CODE+"'"+') '
+
+      ORS = OBJ_NEW('IDLDBRECORDSET', OD, SQL=SQL)
+       NUM_OF_COUNTY=1
+       IF(ORS->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+
+         WHILE (ORS->MOVECURSOR(/NEXT) EQ 1) DO BEGIN
+          NUM_OF_COUNTY=NUM_OF_COUNTY+1
+          AREA_WINTER_WHEAT   = FLOAT(ORS->GETFIELD(0))
+          AREA_SPRING_WHEAT   = FLOAT(ORS->GETFIELD(1))
+          AREA_EARLY_RICE     =  FLOAT(ORS->GETFIELD(2))
+          AREA_SEMILATE_RICE  =    FLOAT(ORS->GETFIELD(3))
+          AREA_LATE_RICE   =   FLOAT(ORS->GETFIELD(4))
+          AREA_CORN      =   FLOAT(ORS->GETFIELD(5))
+          AREA_SOYBEAN       = FLOAT(ORS->GETFIELD(6))
+
+          VALUE_PLOWLAND   =   FLOAT(ORS->GETFIELD(7))
+          VALUE_PADDY_FIELD   = FLOAT(ORS->GETFIELD(8))
+          VALUE_DRY_LAND   =   FLOAT(ORS->GETFIELD(9))
+
+          IF(VALUE_PADDY_FIELD NE 0) THEN BEGIN
+              AREA_EARLY_RICE_TOTAL=AREA_EARLY_RICE+AREA_EARLY_RICE_TOTAL
+              ADD_UP_EARLY_RICE=ADD_UP_EARLY_RICE+AREA_EARLY_RICE*VALUE_PADDY_FIELD
+
+              AREA_SEMILATE_RICE_TOTAL=AREA_SEMILATE_RICE+AREA_SEMILATE_RICE_TOTAL
+              ADD_UP_SEMILATE_RICE=ADD_UP_SEMILATE_RICE+AREA_SEMILATE_RICE*VALUE_PADDY_FIELD
+
+              AREA_LATE_RICE_TOTAL=AREA_LATE_RICE+AREA_LATE_RICE_TOTAL
+              ADD_UP_LATE_RICE=ADD_UP_LATE_RICE+AREA_LATE_RICE*VALUE_PADDY_FIELD
+          ENDIF
+          IF(VALUE_DRY_LAND NE 0) THEN BEGIN
+
+              AREA_WINTER_WHEAT_TOTAL=AREA_WINTER_WHEAT+AREA_WINTER_WHEAT_TOTAL
+              ADD_UP_WINTER_WHEAT=ADD_UP_WINTER_WHEAT+AREA_WINTER_WHEAT*VALUE_DRY_LAND
+
+              AREA_SPRING_WHEAT_TOTAL=AREA_SPRING_WHEAT+AREA_SPRING_WHEAT_TOTAL
+              ADD_UP_SPRING_WHEAT=ADD_UP_SPRING_WHEAT+AREA_SPRING_WHEAT*VALUE_DRY_LAND
+
+              AREA_SOYBEAN_TOTAL=AREA_SOYBEAN+AREA_SOYBEAN_TOTAL
+              ADD_UP_SOYBEAN=ADD_UP_SOYBEAN+AREA_SOYBEAN*VALUE_DRY_LAND
+
+              AREA_CORN_TOTAL=AREA_CORN+AREA_CORN_TOTAL
+              ADD_UP_CORN=ADD_UP_CORN+AREA_CORN*VALUE_DRY_LAND
+
+          ENDIF
+         ENDWHILE
+       ENDIF
+
+    ENDELSE
+
+
+    ;定义一个结构体来存放查询的结果
+    RESULT={$
+       RANGE_NAME       : RANGE_NAME  ,$
+       RANGE_CODE       : RANGE_CODE  ,$
+
+       VALUE_PLOWLAND       : 0.0 ,$
+       VALUE_PADDY_FIELD :   0.0   ,$
+       VALUE_DRY_LAND       : 0.0 ,$
+
+       VALUE_WINTER_WHEAT    :  0.0  ,$
+       VALUE_SPRING_WHEAT    :  0.0  ,$
+       VALUE_EARLY_RICE  :    0.0    ,$
+       VALUE_SEMILATE_RICE   : 0.0 ,$
+       VALUE_LATE_RICE     :    0.0    ,$
+
+       VALUE_CORN    :  0.0  ,$
+       VALUE_SOYBEAN     :  0.0   $
+
+       }
+
+    ;对结构体的变量进行符值
+
+    IF(AREA_PLOWLAND_TOTAL NE 0) THEN RESULT.VALUE_PLOWLAND=ADD_UP_PLOWLAND/AREA_PLOWLAND_TOTAL
+    IF(AREA_PADDY_FIELD_TOTAL NE 0) THEN RESULT.VALUE_PADDY_FIELD=ADD_UP_PADDY_FIELD/AREA_PADDY_FIELD_TOTAL
+    IF(AREA_DRY_LAND_TOTAL NE 0) THEN RESULT.VALUE_DRY_LAND=ADD_UP_DRY_LAND/AREA_DRY_LAND_TOTAL
+
+    IF(AREA_WINTER_WHEAT_TOTAL NE 0) THEN RESULT.VALUE_WINTER_WHEAT=ADD_UP_WINTER_WHEAT/AREA_WINTER_WHEAT_TOTAL
+    IF(AREA_SPRING_WHEAT_TOTAL NE 0) THEN RESULT.VALUE_SPRING_WHEAT=ADD_UP_SPRING_WHEAT/AREA_SPRING_WHEAT_TOTAL
+
+    IF(AREA_EARLY_RICE_TOTAL NE 0) THEN RESULT.VALUE_EARLY_RICE=ADD_UP_EARLY_RICE/AREA_EARLY_RICE_TOTAL
+    IF(AREA_SEMILATE_RICE_TOTAL NE 0) THEN RESULT.VALUE_SEMILATE_RICE=ADD_UP_SEMILATE_RICE/AREA_SEMILATE_RICE_TOTAL
+    IF(AREA_LATE_RICE_TOTAL NE 0) THEN RESULT.VALUE_LATE_RICE=ADD_UP_LATE_RICE/AREA_LATE_RICE_TOTAL
+
+    IF(AREA_CORN_TOTAL NE 0) THEN RESULT.VALUE_CORN=ADD_UP_CORN/AREA_CORN_TOTAL
+    IF(AREA_SOYBEAN_TOTAL NE 0) THEN RESULT.VALUE_SOYBEAN=ADD_UP_SOYBEAN/AREA_SOYBEAN_TOTAL
+
+
+    OBJ_DESTROY, ORS
+    ;HELP,RESULT,/STRUCTURE
+    RETURN,RESULT
+
+END
+
+
+
+
+;-----------------------------------------------------------------
+FUNCTION CMD_ZS_COUNT_STA_PRO_ABOVE_COUNTY, EVENT
+
+    ;**************************************************************
+    ;这是模块的主程序,完成了汇总的工作
+    ;**************************************************************
+    on_error,2
+
+    COMMON COMMON_BLOCK,yesORno,DBobj,FILE_PATH,Year_1,DSN,USER_NAME,PWD,PROVINCE_CODE
+
+    WIDGET_CONTROL,EVENT.TOP,GET_UVALUE = PSTATE
+    SCALE=(*PSTATE).SCALE
+
+    ;如果没有选择范围就退出系统
+    IF(SCALE EQ '请选择尺度') THEN BEGIN
+         MSG=DIALOG_MESSAGE('请先选择尺度!',TITLE='提示',/INFORMATION)
+         CLOSE,/ALL
+		 log, '过程监测-汇总', -1
+         RETURN,0
+    ENDIF
+
+    ;出现一个状态条显示正在读取数据
+    ;F_READ_DATA=READING_DATA( GROUP_LEADER=(*PSTATE).BASE_STA_PRO_ABOVE_COUNTY)
+
+    ;首先获得要查询使用的参数
+    YEAR    =(*PSTATE).YEAR
+    MONTH   =(*PSTATE).MONTH
+    DAY     =(*PSTATE).DAY
+
+    RANGE   =(*PSTATE).RANGE
+    RANGE_NAME	=(*PSTATE).RANGE
+    NUM_OF_RANGE    =  (*PSTATE).NUM_OF_RANGE
+    RANGE_CODE  =(*PSTATE).RANGE_CODE
+    PERIOD		=(*PSTATE).PERIOD
+    SENSOR_CODE	=(*PSTATE).SENSOR_CODE
+
+    DATA_TYPE   =STRTRIM((*PSTATE).DATA_TYPE,2)
+    SENSOR_CODE=STRTRIM((*PSTATE).SENSOR_CODE,2)
+    PERIOD=STRTRIM((*PSTATE).PERIOD,2)
+
+
+    IF(RANGE EQ (*PSTATE).ARR_RANGE[0] AND (SCALE NE '全省')) THEN BEGIN ;同时对所有的省进行汇总
+
+       (*PSTATE).ALL_RANGE=1 ;同时对所有的省进行汇总
+       RESULT=STRARR(13+3,NUM_OF_RANGE-1)
+
+       ;***************************************************************
+       progressTimer = Obj_New("ShowProgress", tlb,/CancelButton)
+       progressTimer->start
+       ;***************************************************************
+       ;通过FOR循环对所有的省进行查询
+       FOR I=0,NUM_OF_RANGE-2 DO BEGIN
+         ;***************************************************************
+         CANCELLED = PROGRESSTIMER->CHECKCANCEL()
+         IF CANCELLED THEN BEGIN
+          OK = DIALOG_MESSAGE('用户终止了操作',TITLE='提示')
+          PROGRESSTIMER->DESTROY ;结束进度条
+          log, '过程监测-汇总', 0
+          RETURN,0
+         ENDIF
+         PROGRESSTIMER->UPDATE, (FLOAT(I)/(NUM_OF_RANGE-1) * 100.0) ;继续进行
+         ;***************************************************************
+         WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,TABLE_YSIZE=NUM_OF_RANGE-1
+			RANGE_NAME	=(*PSTATE).ARR_RANGE[I+1]
+			RANGE_CODE	=(*PSTATE).ARR_RANGE_CODE[I+1]
+			RESULT_TEMP=ZS_COUNT_STA_PRO_ABOVE_COUNTY(RANGE_NAME,RANGE_CODE,YEAR,MONTH,DAY,DATA_TYPE,SCALE,$
+                           SENSOR_CODE,PERIOD)
+         ;RETURN,0
+         RESULT[0,I]=RESULT_TEMP.RANGE_NAME
+         RESULT[1,I]=RESULT_TEMP.RANGE_CODE
+
+         RESULT[2,I]=RESULT_TEMP.VALUE_PLOWLAND
+         RESULT[3,I]=RESULT_TEMP.VALUE_PADDY_FIELD
+         RESULT[4,I]=RESULT_TEMP.VALUE_DRY_LAND
+
+         RESULT[5,I]=RESULT_TEMP.VALUE_SPRING_WHEAT
+         RESULT[6,I]=RESULT_TEMP.VALUE_WINTER_WHEAT
+
+         RESULT[7,I]=RESULT_TEMP.VALUE_EARLY_RICE
+         RESULT[8,I]=RESULT_TEMP.VALUE_SEMILATE_RICE
+         RESULT[9,I]=RESULT_TEMP.VALUE_LATE_RICE
+
+         RESULT[10,I]=RESULT_TEMP.VALUE_CORN
+         RESULT[11,I]=RESULT_TEMP.VALUE_SOYBEAN
+
+         RESULT[12,I]=(*PSTATE).DATA_TYPE
+         RESULT[13,I]=(*PSTATE).SENSOR_CODE
+         RESULT[14,I]=(*PSTATE).PERIOD
+       ENDFOR
+       progressTimer->destroy ;
+
+    ENDIF ELSE BEGIN   ;只对一个省进行汇总
+
+       (*PSTATE).ALL_RANGE=0 ;只对一个省进行汇总
+       WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,TABLE_YSIZE=1
+
+       RESULT_TEMP   = ZS_COUNT_STA_PRO_ABOVE_COUNTY(RANGE,RANGE_CODE,YEAR,MONTH,DAY,DATA_TYPE,SCALE,$
+                                  SENSOR_CODE,PERIOD)
+       ;RETURN,0
+       RESULT=STRARR(13+3)
+       RESULT[0]=RESULT_TEMP.RANGE_NAME
+       RESULT[1]=RESULT_TEMP.RANGE_CODE
+
+       RESULT[2]=RESULT_TEMP.VALUE_PLOWLAND
+       RESULT[3]=RESULT_TEMP.VALUE_PADDY_FIELD
+       RESULT[4]=RESULT_TEMP.VALUE_DRY_LAND
+
+       RESULT[5]=RESULT_TEMP.VALUE_SPRING_WHEAT
+       RESULT[6]=RESULT_TEMP.VALUE_WINTER_WHEAT
+
+       RESULT[7]=RESULT_TEMP.VALUE_EARLY_RICE
+       RESULT[8]=RESULT_TEMP.VALUE_SEMILATE_RICE
+       RESULT[9]=RESULT_TEMP.VALUE_LATE_RICE
+
+       RESULT[10]=RESULT_TEMP.VALUE_CORN
+       RESULT[11]=RESULT_TEMP.VALUE_SOYBEAN
+       RESULT[12]=(*PSTATE).DATA_TYPE
+       RESULT[13]=(*PSTATE).SENSOR_CODE
+       RESULT[14]=(*PSTATE).PERIOD
+
+    ENDELSE
+
+    ;关闭正在读取数据的对话框
+    ;WIDGET_CONTROL,(*F_READ_DATA).BASE_READ_DATA,/DESTROY
+
+    ;把值写入到表格中
+    RESULT=STRTRIM(RESULT,2)
+    ;PRINT,'RESULT',RESULT
+    WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,SET_VALUE=RESULT
+
+    ;改变变量值,表征汇总已经完成
+    (*PSTATE).COUNT_DONE=1
+    log, '过程监测-汇总', 0
+    RETURN, EVENT ; BY DEFAULT, RETURN THE EVENT.
+
+END
+;-----------------------------------------------------------------
+
+
+;-----------------------------------------------------------------
+FUNCTION CMD_WRITE_STA_PRO_ABOVE_COUNTY, EVENT
+
+	on_error,2
+
+    WIDGET_CONTROL,EVENT.TOP,GET_UVALUE = PSTATE
+
+    ;完成把汇总的结果进行入库处理的功能
+    ;modified 20070607
+    COMMON COMMON_BLOCK,yesORno,DBobj,FILE_PATH,Year_1,DSN,USER_NAME,PWD,PROVINCE_CODE
+    ;PROVINCE_CODE='230000'
+    ;1)首先对是否已经进行过汇总进行验证,只有在汇总过后才运行程序
+    IF((*PSTATE).COUNT_DONE EQ 0) THEN BEGIN
+        MSG=DIALOG_MESSAGE('请先进行汇总!',TITLE='提示',/INFORMATION)
+        CLOSE,/ALL
+        RETURN,0
+    ENDIF
+
+    WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,GET_VALUE=ARR_RESULT
+
+    ;2)获取相应的参数
+    YEAR   =STRTRIM(STRING((*PSTATE).YEAR)   ,2)
+    MONTH   =STRTRIM(STRING((*PSTATE).MONTH),2)
+    DAY     =STRTRIM(STRING((*PSTATE).DAY) ,2)
+    RANGE   =(*PSTATE).RANGE
+    RANGE_CODE  =(*PSTATE).RANGE_CODE
+    SCALE   =(*PSTATE).SCALE
+
+    DATA_TYPE     =(*PSTATE).DATA_TYPE
+
+    NUM_OF_RANGE    =(*PSTATE).NUM_OF_RANGE
+    SENSOR_CODE     =(*PSTATE).SENSOR_CODE
+    PERIOD       =(*PSTATE).PERIOD
+
+    CASE SCALE OF
+        '全省' :BEGIN
+         SCALE_SQL='PROVINCE'
+         RANGE_CODE=PROVINCE_CODE
+       END
+       '自定义监测区':BEGIN
+         SCALE_SQL='ROI'
+       END
+    ENDCASE
+
+    ;3)后进行判断是对一个省还是对所有的省进行了汇总,汇总多少个省,入库多少个
+
+    ;把数据库链接取过来
+    OD=DBobj
+
+    DIMENSION=(SIZE(ARR_RESULT))[0]
+;   PRINT,DIMENSION
+;   HELP,ARR_RESULT
+    IF(DIMENSION EQ 1) THEN BEGIN
+       ;A)先检查该记录是不是已经存在了,如果已经存在,删除
+       SQL='DELETE FROM PARAMETER_PROCESS_'+SCALE_SQL
+       SQL=SQL+' WHERE  ('+SCALE_SQL+'_CODE = '+"'"+RANGE_CODE+"' "+')'
+        SQL=SQL+'AND (YEAR = '+YEAR+')'
+        SQL=SQL+'AND (MONTH = '+MONTH+') '
+        SQL=SQL+'AND (DAY = '+DAY+') '
+
+        SQL=SQL+'AND (SENSOR_CODE = '+"'"+STRTRIM(SENSOR_CODE,2)+"'"+')'
+        SQL=SQL+'AND (DATA_TYPE = '+"'"+STRTRIM(DATA_TYPE,2)+"'"+')'
+        SQL=SQL+'AND (PERIODS = '+STRTRIM(PERIOD,2)+')'
+       PRINT,'SQL 20060825',SQL
+        OD->EXECUTESQL,SQL
+
+       ;B)进行数据所入库
+       SQL='INSERT INTO PARAMETER_PROCESS_'+SCALE_SQL
+       SQL=SQL+'('+SCALE_SQL+'_CODE ,YEAR ,MONTH ,DAY,'
+       SQL=SQL+'AVG_PLOWLAND ,AVG_PADDY_FIELD,AVG_DRY_LAND,'
+       SQL=SQL+'AVG_WINTER_WHEAT ,AVG_SPRING_WHEAT,'
+       SQL=SQL+'AVG_EARLY_RICE ,AVG_SEMILATE_RICE,AVG_LATE_RICE,'
+       SQL=SQL+'AVG_MAIZE,AVG_SOYBEAN,'
+        SQL=SQL+'DATA_TYPE,SENSOR_CODE,PERIODS ) '
+        SQL=SQL+'VALUES ('+"'"+RANGE_CODE+"'"+','
+        SQL=SQL+STRTRIM(YEAR,2)     +','
+        SQL=SQL+STRTRIM(MONTH,2)  +','
+        SQL=SQL+STRTRIM(DAY,2)       +','
+        SQL=SQL+STRTRIM(ARR_RESULT[2],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[3],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[4],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[5],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[6],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[7],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[8],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[9],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[10],2) +','
+        SQL=SQL+STRTRIM(ARR_RESULT[11],2) +','
+        SQL=SQL+"'"+STRTRIM(ARR_RESULT[12],2)+"'" +','    ;数据类型
+        SQL=SQL+"'"+STRTRIM(SENSOR_CODE,2)+"'" +','     ;传感器类型
+        SQL=SQL+STRTRIM(PERIOD,2)+')'   ;周期
+        PRINT,SQL
+        OD->EXECUTESQL,SQL
+;     PRINT,ARR_RESULT
+    ENDIF ELSE BEGIN
+       progressTimer = Obj_New("ShowProgress", tlb,/CancelButton)
+       progressTimer->start
+       K=(SIZE(ARR_RESULT))[2]
+       FOR I=0,(SIZE(ARR_RESULT))[2]-1 DO BEGIN
+         ;************************************************************
+         cancelled = progressTimer->CheckCancel()
+         IF cancelled THEN BEGIN
+          ok = Dialog_Message('用户终止了操作',TITLE='提示')
+          progressTimer->Destroy ;结束进度条
+          log, '过程监测-汇总', 0
+         RETURN,0
+         ENDIF
+         progressTimer->Update, (i*1.0/K * 100.0) ;继续进行
+         ;************************************************************
+         ;A)先检查该记录是不是已经存在了,如果已经存在,删除
+       	SQL='DELETE FROM PARAMETER_PROCESS_'+SCALE_SQL
+       	SQL=SQL+' WHERE  ('+SCALE_SQL+'_CODE = '+"'"+STRTRIM(ARR_RESULT[1,I],2)+"' "+')'
+        SQL=SQL+'AND (YEAR = '+YEAR+')'
+        SQL=SQL+'AND (MONTH = '+MONTH+') '
+        SQL=SQL+'AND (DAY = '+DAY+') '
+        SQL=SQL+'AND (SENSOR_CODE = '+"'"+STRTRIM(SENSOR_CODE,2)+"'"+')'
+        SQL=SQL+'AND (DATA_TYPE = '+"'"+STRTRIM(DATA_TYPE,2)+"'"+')'
+        SQL=SQL+'AND (PERIODS = '+STRTRIM(PERIOD,2)+')'
+       	PRINT,'SQL 20060827',SQL
+
+         OD->EXECUTESQL,SQL
+
+         ;B)进行数据所入库
+        SQL='INSERT INTO PARAMETER_PROCESS_'+SCALE_SQL
+       	SQL=SQL+'('+SCALE_SQL+'_CODE ,YEAR ,MONTH ,DAY,'
+       	SQL=SQL+'AVG_PLOWLAND ,AVG_PADDY_FIELD,AVG_DRY_LAND,'
+       	SQL=SQL+'AVG_WINTER_WHEAT ,AVG_SPRING_WHEAT,'
+       	SQL=SQL+'AVG_EARLY_RICE ,AVG_SEMILATE_RICE,AVG_LATE_RICE,'
+       	SQL=SQL+'AVG_MAIZE,AVG_SOYBEAN,'
+        SQL=SQL+'DATA_TYPE,SENSOR_CODE,PERIODS ) '
+        SQL=SQL+'VALUES ('+"'"+STRTRIM(ARR_RESULT[1,I],2)+"'"+','
+        SQL=SQL+STRTRIM(YEAR,2)     +','
+        SQL=SQL+STRTRIM(MONTH,2)  +','
+        SQL=SQL+STRTRIM(DAY,2)       +','
+        SQL=SQL+STRTRIM(ARR_RESULT[2,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[3,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[4,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[5,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[6,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[7,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[8,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[9,I],2)  +','
+        SQL=SQL+STRTRIM(ARR_RESULT[10,I],2) +','
+        SQL=SQL+STRTRIM(ARR_RESULT[11,I],2) +','
+        SQL=SQL+"'"+STRTRIM(ARR_RESULT[12,I],2)+"'" +','    ;数据类型
+        SQL=SQL+"'"+STRTRIM(SENSOR_CODE,2)+"'" +','     ;传感器类型
+        SQL=SQL+STRTRIM(PERIOD,2)+')'   ;周期
+;           PRINT,SQL
+        OD->EXECUTESQL,SQL
+       ENDFOR
+       progressTimer->destroy ;
+    ENDELSE
+    MSG=DIALOG_MESSAGE('数据入库完成!',TITLE='提示',/INFORMATION)
+    log, '过程监测-汇总', 1
+    RETURN, EVENT ; BY DEFAULT, RETURN THE EVENT.
+
+END
+;-----------------------------------------------------------------
+
+
+
+
+;-----------------------------------------------------------------
+FUNCTION DST_SCALE_STA_PRO_ABOVE_COUNTY, EVENT
+
+    WIDGET_CONTROL,EVENT.TOP,GET_UVALUE = PSTATE
+
+
+END
+;-----------------------------------------------------------------
+
+;-----------------------------------------------------------------
+;
+; EMPTY STUB PROCEDURE USED FOR AUTOLOADING.
+;
+PRO STA_PRO_ABOVE_COUNTY_EVENTCB
+END
+;
+; IDL WIDGET INTERFACE PROCEDURES. THIS CODE IS AUTOMATICALLY
+;     GENERATED AND SHOULD NOT BE MODIFIED.
+;-----------------------------------------------------------------
+
+;-----------------------------------------------------------------
+;
+; GENERATED ON: 11/17/2004 16:42.38
+;
+PRO BASE_STA_PRO_ABOVE_COUNTY_EVENT, EVENT
+
+	on_error,2
+
+COMMON COMMON_BLOCK,yesORno,DBobj,FILE_PATH,Year_1,DSN,USER_NAME,PWD,PROVINCE_CODE
+
+  WTARGET = (WIDGET_INFO(EVENT.ID,/NAME) EQ 'TREE' ?  $
+      WIDGET_INFO(EVENT.ID, /TREE_ROOT) : EVENT.ID)
+
+
+  WIDGET_CONTROL,EVENT.TOP,GET_UVALUE = PSTATE
+  WWIDGET =  EVENT.TOP
+
+  CASE WTARGET OF
+
+    ;在选择自定义监测区时,要将监测区的名称读取出来
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_SCALE_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       SCALE=(*PSTATE).ARR_SCALE[INDEX]
+       (*PSTATE).SCALE=SCALE
+
+
+       PRINT,SCALE
+       CASE SCALE OF
+         '请选择尺度':BEGIN
+          TEMP=BYTARR(12)
+          TEMP=STRING(TEMP)
+          WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,COLUMN_LABELS=TEMP
+          TEMP=0
+          WIDGET_CONTROL,(*PSTATE).DST_RANGE_STA_PRO_ABOVE_COUNTY,SET_VALUE=['']
+          WIDGET_CONTROL,(*PSTATE).DST_RANGE_STA_PRO_ABOVE_COUNTY,SENSITIVE=0
+         END
+
+         '全省':BEGIN
+         WIDGET_CONTROL,(*PSTATE).DST_RANGE_STA_PRO_ABOVE_COUNTY,SENSITIVE=1
+          WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,COLUMN_LABELS=['省', '省代码',  $
+                  '耕地','水田','旱地','春小麦', '冬小麦', '早稻', '中稻', '晚稻', $
+                  '玉米','大豆', '类型','传感器', '周期']
+               WIDGET_CONTROL,(*PSTATE).DST_RANGE_STA_PRO_ABOVE_COUNTY,SET_VALUE=['全省']
+
+               (*PSTATE).RANGE    ='全省'
+               (*PSTATE).NUM_OF_RANGE=1
+               (*PSTATE).ARR_RANGE_CODE=[' ']
+               (*PSTATE).RANGE_CODE='1'
+               (*PSTATE).ARR_RANGE       =['全省']
+
+
+         END
+
+         '自定义监测区':BEGIN
+         WIDGET_CONTROL,(*PSTATE).DST_RANGE_STA_PRO_ABOVE_COUNTY,SENSITIVE=1
+          WIDGET_CONTROL,(*PSTATE).TABLE_RESULT,COLUMN_LABELS=['名称', '代码',  $
+                  '耕地','水田','旱地','春小麦', '冬小麦', '早稻', '中稻', '晚稻', $
+                  '玉米', '大豆', '类型','传感器', '周期']
+
+          OD=DBobj
+              ORS = OBJ_NEW('IDLDBRECORDSET', OD, TABLE='ROI_CODE')
+             ;这里给省的起始的个数是1,而不是0
+             ;这是因为第一个选项是'所有省'
+             NUM_OF_RANGE=1
+          IF(ORS->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+
+              ;先找出省的个数
+              WHILE (ORS->MOVECURSOR(/NEXT) EQ 1) DO BEGIN
+                 NUM_OF_RANGE=NUM_OF_RANGE+1
+              ENDWHILE
+
+              ;然后将省的名称读入数组
+              ARR_RANGE=STRARR(NUM_OF_RANGE+1)
+              ARR_RANGE_CODE=STRARR(NUM_OF_RANGE+1)
+              TEMP=ORS->MOVECURSOR(/FIRST)
+              COUNT=0
+              ARR_RANGE[COUNT]='所有监测区'
+
+              COUNT=COUNT+1
+              ARR_RANGE[COUNT]=ORS->GETFIELD(1)
+              ARR_RANGE_CODE[COUNT]=ORS->GETFIELD(0)
+              WHILE (ORS->MOVECURSOR(/NEXT) EQ 1) DO BEGIN
+                 COUNT=COUNT+1
+                 ;在读取省名的时候把省的代码也读取了出来
+                 ;主要是减少后面的工作量
+                 ARR_RANGE[COUNT]=ORS->GETFIELD(1)
+                 ARR_RANGE_CODE[COUNT]=ORS->GETFIELD(0)
+              ENDWHILE
+
+              WIDGET_CONTROL,(*PSTATE).DST_RANGE_STA_PRO_ABOVE_COUNTY,SET_VALUE=ARR_RANGE
+              NUM_OF_RANGE=NUM_OF_RANGE + 1
+              (*PSTATE).ARR_RANGE[0:NUM_OF_RANGE-1]=ARR_RANGE[0:NUM_OF_RANGE-1]
+
+              (*PSTATE).ARR_RANGE_CODE[0:NUM_OF_RANGE-1] =ARR_RANGE_CODE[0:NUM_OF_RANGE-1]
+              (*PSTATE).NUM_OF_RANGE =NUM_OF_RANGE
+              (*PSTATE).RANGE    ='所有监测区'
+          ENDIF
+          OBJ_DESTROY,ORS
+         END
+         ELSE:;
+       ENDCASE
+
+       RETURN
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_YEAR_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).YEAR=(*PSTATE).ARR_YEAR[INDEX]
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_MONTH_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).MONTH=(*PSTATE).ARR_MONTH[INDEX]
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_DAY_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).DAY=(*PSTATE).ARR_DAY[INDEX]
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_SENSOR_TYPE_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).SENSOR_CODE=(*PSTATE).ARR_SENSOR_CODE[INDEX]
+       PRINT,(*PSTATE).SENSOR_CODE
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_period_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).PERIOD=(*PSTATE).ARR_DAY[INDEX]
+       PRINT,(*PSTATE).PERIOD
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_DATA_TYPE_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).DATA_TYPE=(*PSTATE).ARR_DATA_TYPE[INDEX]
+       PRINT,(*PSTATE).DATA_TYPE
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='DST_RANGE_STA_PRO_ABOVE_COUNTY'): BEGIN
+        INDEX=EVENT.INDEX
+       (*PSTATE).RANGE=(*PSTATE).ARR_RANGE[INDEX]
+       (*PSTATE).RANGE_CODE=(*PSTATE).ARR_RANGE_CODE[INDEX]
+       PRINT,(*PSTATE).RANGE
+       PRINT,(*PSTATE).RANGE_CODE
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='CMD_ZS_COUNT_STA_PRO_ABOVE_COUNTY'): BEGIN
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='CMD_WRITE_STA_PRO_ABOVE_COUNTY'): BEGIN
+    END
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='CMD_CANCEL_STA_PRO_ABOVE_COUNTY'): BEGIN
+        common_log,'关闭长势过程汇总'
+        CLOSE,/ALL
+        WIDGET_CONTROL, EVENT.TOP, /DESTROY
+        RETURN
+    END
+
+    WIDGET_INFO(WWIDGET, FIND_BY_UNAME='CMD_HELP_STA_PRO_ABOVE_COUNTY'): BEGIN
+
+		if file_test('HELP\HELP.chm') then begin
+			ONLINE_HELP, "过程监测模块", BOOK='HELP\HELP.chm', /FULL_PATH
+		endif else begin
+			info_help=dialog_message('找不到帮助文档',title='警告')
+		endelse
+
+;        ONLINE_HELP,  BOOK='HELP\HELP.chm', /FULL_PATH,"'过程监测模块'"
+    END
+    ELSE:
+  ENDCASE
+
+END
+;-----------------------------------------------------------------
+pro ZS_PRO_SUM_cleanup, id
+	Widget_Control, id, get_uvalue=pstate
+	heap_free, pstate
+end
+;-----------------------------------------------------------------
+
+PRO BASE_STA_PRO_ABOVE_COUNTY_P, GROUP_LEADER=WGROUP
+
+	on_error,2
+
+  ;避免同一个界面重复出现
+  IF ( XREGISTERED('BASE_STA_PRO_ABOVE_COUNTY') NE 0 ) THEN RETURN
+
+  RESOLVE_ROUTINE, 'STA_PRO_ABOVE_COUNTY_EVENTCB',/COMPILE_FULL_FILE  ; LOAD EVENT CALLBACK ROUTINES
+  TEMP_1=43
+  BASE_STA_PRO_ABOVE_COUNTY = WIDGET_BASE( GROUP_LEADER=WGROUP,  $
+      UNAME='BASE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=320 ,YOFFSET=200  $
+      ,SCR_XSIZE=462 ,SCR_YSIZE=346+TEMP_1 ,TITLE='过程监测--汇总'  $
+      ,SPACE=3 ,XPAD=3 ,YPAD=3 ,TLB_FRAME_ATTR=1)
+
+
+  BASE_TIME_STA_PRO_ABOVE_COUNTY = Widget_Base(BASE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='BASE_TIME_STA_PRO_ABOVE_COUNTY' ,FRAME=1 ,XOFFSET=6  $
+      ,YOFFSET=6 ,SCR_XSIZE=443 ,SCR_YSIZE=31 ,TITLE='IDL' ,SPACE=3  $
+      ,XPAD=3 ,YPAD=3)
+
+
+  LBL_TIME_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Label(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='LBL_TIME_STA_PRO_ABOVE_COUNTY' ,XOFFSET=6 ,YOFFSET=8  $
+      ,SCR_XSIZE=100 ,SCR_YSIZE=19 ,/ALIGN_LEFT ,VALUE='请选择汇总的时间:')
+
+	common current_date, c_year, c_month, c_day
+	subbase = widget_base(BASE_TIME_STA_PRO_ABOVE_COUNTY,/row,xpad=3,ypad=3,space=5,XOFFSET=68+60)
+	WID_LABEL_date = Widget_text(subbase,xsize=15, $
+		VALUE=strtrim(c_year,2)+'-'+strtrim(c_month,2)+'-'+strtrim(c_day,2))
+	CMD_pick_date = Widget_Button(subbase,SCR_XSIZE=30,SCR_YSIZE=20,/ALIGN_CENTER, $
+		VALUE='.\Image\Calendar.bmp',/BITMAP,EVENT_PRO='ActiveXCal',uvalue={text_id:WID_LABEL_date, pointer:PTR_NEW(), detail:'CMD_pick_date'})
+
+
+;  LBL_YEAR_STA_PRO_ABOVE_COUNTY =  $
+;      Widget_Label(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;      UNAME='LBL_YEAR_STA_PRO_ABOVE_COUNTY' ,XOFFSET=68+45 ,YOFFSET=8  $
+;      ,SCR_XSIZE=18 ,SCR_YSIZE=18 ,/ALIGN_LEFT ,VALUE='年:')
+;
+;
+;  LBL_MONTH_STA_PRO_ABOVE_COUNTY =  $
+;      Widget_Label(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;      UNAME='LBL_MONTH_STA_PRO_ABOVE_COUNTY' ,XOFFSET=150-37+75 ,YOFFSET=8  $
+;      ,SCR_XSIZE=18 ,SCR_YSIZE=18 ,/ALIGN_LEFT ,VALUE='月:')
+;
+;
+;  LBL_DAY_STA_PRO_ABOVE_COUNTY = Widget_Label(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;      UNAME='LBL_DAY_STA_PRO_ABOVE_COUNTY' ,XOFFSET=225-46+75 ,YOFFSET=8  $
+;      ,SCR_XSIZE=18 ,SCR_YSIZE=18 ,/ALIGN_LEFT ,VALUE='日:')
+;
+;
+;  DST_YEAR_STA_PRO_ABOVE_COUNTY =  $
+;      Widget_Combobox(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;; 	Widget_Droplist(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;      UNAME='DST_YEAR_STA_PRO_ABOVE_COUNTY' ,XOFFSET=90-32+75 ,YOFFSET=4  $
+;      ,SCR_XSIZE=49 ,SCR_YSIZE=22)
+;
+;
+;  DST_MONTH_STA_PRO_ABOVE_COUNTY =  $
+;      Widget_Droplist(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;      UNAME='DST_MONTH_STA_PRO_ABOVE_COUNTY' ,XOFFSET=170-38+75 ,YOFFSET=4  $
+;      ,SCR_XSIZE=40 ,SCR_YSIZE=21)
+;
+;
+;  DST_DAY_STA_PRO_ABOVE_COUNTY =  $
+;      Widget_Droplist(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+;      UNAME='DST_DAY_STA_PRO_ABOVE_COUNTY' ,XOFFSET=245-47+75 ,YOFFSET=4  $
+;      ,SCR_XSIZE=44 ,SCR_YSIZE=21)
+
+
+  LBL_period_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Label(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='LBL_period_STA_PRO_ABOVE_COUNTY' ,XOFFSET=352 ,YOFFSET=8  $
+      ,SCR_XSIZE=29 ,SCR_YSIZE=18 ,/ALIGN_LEFT ,VALUE='周期:')
+
+  DST_period_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Droplist(BASE_TIME_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='DST_period_STA_PRO_ABOVE_COUNTY' ,XOFFSET=382 ,YOFFSET=4  $
+      ,SCR_XSIZE=48 ,SCR_YSIZE=21 )
+
+;***************************************************************************
+;修改后的内容
+BASE_DATA_PARAMETER = Widget_Base(BASE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='BASE_DATA_PARAMETER' ,FRAME=1 ,XOFFSET=6  $
+      ,YOFFSET=3+TEMP_1 ,SCR_XSIZE=443 ,SCR_YSIZE=31 ,TITLE='IDL' ,SPACE=3  $
+      ,XPAD=3 ,YPAD=3)
+
+
+  LBL_SENSOR_TYPE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Label(BASE_DATA_PARAMETER,  $
+      UNAME='LBL_SENSOR_TYPE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=6 ,YOFFSET=8  $
+      ,SCR_XSIZE=100 ,SCR_YSIZE=19 ,/ALIGN_LEFT ,VALUE='请选择传感器类型:')
+
+
+  DST_SENSOR_TYPE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Droplist(BASE_DATA_PARAMETER,  $
+      UNAME='DST_SENSOR_TYPE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=90-32+75 ,YOFFSET=4  $
+      ,SCR_XSIZE=100 ,SCR_YSIZE=22)
+
+
+
+  LBL_DATA_TYPE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Label(BASE_DATA_PARAMETER,  $
+      UNAME='LBL_DATA_TYPE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=352 ,YOFFSET=8  $
+      ,SCR_XSIZE=29 ,SCR_YSIZE=18 ,/ALIGN_LEFT ,VALUE='类型:')
+
+  DST_DATA_TYPE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Droplist(BASE_DATA_PARAMETER,  $
+      UNAME='DST_DATA_TYPE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=382 ,YOFFSET=4  $
+      ,SCR_XSIZE=48 ,SCR_YSIZE=21 )
+
+;***************************************************************************
+  BASE_RANGE_STA_PRO_ABOVE_COUNTY = Widget_Base(BASE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='BASE_RANGE_STA_PRO_ABOVE_COUNTY' ,FRAME=1 ,XOFFSET=6  $
+      ,YOFFSET=6+37+TEMP_1 ,SCR_XSIZE=443 ,SCR_YSIZE=31 ,TITLE='IDL' ,SPACE=3  $
+      ,XPAD=3 ,YPAD=3)
+
+
+  LBL_TIME_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Label(BASE_RANGE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='LBL_TIME_STA_PRO_ABOVE_COUNTY' ,XOFFSET=6 ,YOFFSET=8  $
+      ,SCR_XSIZE=100 ,SCR_YSIZE=19 ,/ALIGN_LEFT ,VALUE='请选择汇总的尺度:')
+
+
+
+  DST_SCALE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Droplist(BASE_RANGE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='DST_SCALE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=90-32+75 ,YOFFSET=4  $
+      ,SCR_XSIZE=100 ,SCR_YSIZE=21)
+
+
+
+
+  LBL_RANGE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Label(BASE_RANGE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='LBL_RANGE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=299-40 ,YOFFSET=8  $
+      ,SCR_XSIZE=70 ,SCR_YSIZE=18 ,/ALIGN_LEFT ,VALUE='汇总的范围:')
+
+
+  DST_RANGE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Droplist(BASE_RANGE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='DST_RANGE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=330 ,YOFFSET=4  $
+      ,SCR_XSIZE=100 ,SCR_YSIZE=22 ,SENSITIVE=0)
+
+
+;*********************************************************************************
+
+
+  TABLE_RESULT_STA_PRO_ABOVE_COUNTY = Widget_Table(BASE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='TABLE_RESULT_STA_PRO_ABOVE_COUNTY' ,XOFFSET=7 ,YOFFSET=65+40+TEMP_1  $
+      ,SCR_XSIZE=442 ,SCR_YSIZE=148 ,XSIZE=15 ,YSIZE=135,FRAME=1)
+
+
+  LBL_RESULT_STA_PRO_ABOVE_COUNTY = Widget_Label(BASE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='LBL_RESULT_STA_PRO_ABOVE_COUNTY' ,XOFFSET=9 ,YOFFSET=47+40+TEMP_1  $
+      ,SCR_XSIZE=111 ,SCR_YSIZE=19 ,/ALIGN_LEFT  $
+      ,VALUE='汇总结果显示如下:')
+
+
+  BASE_CMD_STA_PRO_ABOVE_COUNTY = Widget_Base(BASE_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='BASE_CMD_STA_PRO_ABOVE_COUNTY' ,FRAME=1 ,XOFFSET=7  $
+      ,YOFFSET=233+40+TEMP_1 ,SCR_XSIZE=443 ,SCR_YSIZE=36 ,TITLE='IDL' ,SPACE=3  $
+      ,XPAD=3 ,YPAD=3)
+
+
+  CMD_ZS_COUNT_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Button(BASE_CMD_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='CMD_ZS_COUNT_STA_PRO_ABOVE_COUNTY' ,XOFFSET=8 ,YOFFSET=6  $
+      ,SCR_XSIZE=92 ,SCR_YSIZE=22  $
+      ,EVENT_FUNC='CMD_ZS_COUNT_STA_PRO_ABOVE_COUNTY' ,/ALIGN_CENTER  $
+      ,VALUE='汇总')
+
+
+  CMD_WRITE_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Button(BASE_CMD_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='CMD_WRITE_STA_PRO_ABOVE_COUNTY' ,XOFFSET=119 ,YOFFSET=6  $
+      ,SCR_XSIZE=92 ,SCR_YSIZE=22  $
+      ,EVENT_FUNC='CMD_WRITE_STA_PRO_ABOVE_COUNTY' ,/ALIGN_CENTER  $
+      ,VALUE='数据入库')
+
+
+  CMD_CANCEL_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Button(BASE_CMD_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='CMD_CANCEL_STA_PRO_ABOVE_COUNTY' ,XOFFSET=339 ,YOFFSET=6  $
+      ,SCR_XSIZE=92 ,SCR_YSIZE=22  $
+      ,/ALIGN_CENTER  $
+      ,VALUE='关闭')
+
+
+  CMD_HELP_STA_PRO_ABOVE_COUNTY =  $
+      Widget_Button(BASE_CMD_STA_PRO_ABOVE_COUNTY,  $
+      UNAME='CMD_HELP_STA_PRO_ABOVE_COUNTY' ,XOFFSET=229 ,YOFFSET=6  $
+      ,SCR_XSIZE=92 ,SCR_YSIZE=22  $
+      ,/ALIGN_CENTER  $
+      ,VALUE='帮助')
+
+
+
+  COMMON COMMON_BLOCK,yesORno,DBobj,FILE_PATH,Year,DSN,USER_NAME,PWD,PROVINCE_CODE
+
+year_droplist=strtrim(string(indgen(36)+1980),2)
+  STATE={$
+		widget_top : BASE_STA_PRO_ABOVE_COUNTY,$
+        BASE_STA_PRO_ABOVE_COUNTY   : BASE_STA_PRO_ABOVE_COUNTY   ,$
+        DST_RANGE_STA_PRO_ABOVE_COUNTY  :DST_RANGE_STA_PRO_ABOVE_COUNTY  ,$
+;       ARR_YEAR   :   [ '1990', '1991', '1992', '1993', '1994', '1995', '1996', '1997', '1998','1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006'] ,$
+       ARR_YEAR		:	year_droplist , $
+       ARR_MONTH     :  [ '1', '2', '3','4', '5', '6', '7', '8', '9', '10', '11', '12' ],$
+       ARR_DAY      :   ['1', '2', '3','4', '5', '6', '7', '8', '9', '10', $
+                   '11', '12', '13','14', '15', '16', '17', '18', '19', '20',$
+                   '21', '22', '23','24', '25', '26', '27', '28', '29', '30', '31'] ,$
+
+       ARR_DATA_TYPE :   ['NDVI','LAI','NPP'],$
+       ARR_SCALE     :  ['请选择尺度','全省','自定义监测区']     ,$
+
+       ARR_RANGE     :  STRARR(150)  ,$
+       ARR_RANGE_CODE    :  STRARR(150)  ,$
+
+       YEAR       :  1990 ,$
+       MONTH        : 1   ,$
+       DAY          :  1    ,$
+       SCALE        : '请选择尺度',$
+       RANGE        : ''  ,$
+       RANGE_CODE       : ''  ,$
+       DATA_TYPE     :  'NDVI'   ,$
+       TABLE_RESULT  :    TABLE_RESULT_STA_PRO_ABOVE_COUNTY  ,$
+
+       COUNT_DONE       : 0   ,$ ;用一个变量来标志是否进行了汇总运算
+       ALL_RANGE     :  1    ,$
+
+       ARR_SENSOR       : [ 'AVHRR', 'MODIS', 'VGT'] ,$
+       ARR_SENSOR_CODE   : [ 1, 2, 3] ,$
+       SENSOR_CODE     :    1       ,$
+       period         :    1       ,$
+
+
+       NUM_OF_RANGE  :    0  $
+       ;表中实际省的个数,包括列表中的其他项,一般情况下为32
+
+;       yesORno      :   yesORno   , $
+;        DBobj         :    DBobj  $
+
+
+         }
+
+  PSTATE=PTR_NEW(STATE,/NO_COPY)
+  WIDGET_CONTROL,BASE_STA_PRO_ABOVE_COUNTY,SET_UVALUE=PSTATE
+
+	WIDGET_CONTROL, CMD_pick_date, get_uvalue=staff
+    staff.pointer = PSTATE
+    WIDGET_CONTROL, CMD_pick_date, set_uvalue=staff
+
+  WIDGET_CONTROL, /REALIZE, BASE_STA_PRO_ABOVE_COUNTY
+  WIDGET_CONTROL,CMD_CANCEL_STA_PRO_ABOVE_COUNTY,/INPUT_FOCUS
+
+  ;************************************************************************
+  ;给下拉列表赋值,有的数据需要从数据库中读取
+;  WIDGET_CONTROL,DST_YEAR_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_YEAR
+;  WIDGET_CONTROL,DST_MONTH_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_MONTH
+;  WIDGET_CONTROL,DST_DAY_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_DAY
+  WIDGET_CONTROL,DST_DATA_TYPE_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_DATA_TYPE
+
+  WIDGET_CONTROL,DST_PERIOD_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_DAY
+  WIDGET_CONTROL,DST_SENSOR_TYPE_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_SENSOR
+
+  WIDGET_CONTROL,DST_SCALE_STA_PRO_ABOVE_COUNTY,SET_VALUE=(*PSTATE).ARR_SCALE
+  ;************************************************************************
+  WIDGET_CONTROL,TABLE_RESULT_STA_PRO_ABOVE_COUNTY,COLUMN_WIDTHS=51
+
+  ;***********************************************************************
+  ;为了系统演示所增加的代码
+  TEMP=1
+  IF(TEMP EQ 1)THEN BEGIN
+	  	WIDGET_CONTROL,DST_PERIOD_STA_PRO_ABOVE_COUNTY,SET_DROPLIST_SELECT=9
+
+		(*PSTATE).YEAR	=	strtrim(c_year,2)
+	  	(*PSTATE).MONTH	=	strtrim(c_month,2)
+	  	(*PSTATE).DAY	=	strtrim(c_day,2)
+	  	(*PSTATE).PERIOD=	10
+  ENDIF
+  ;***********************************************************************
+
+  XMANAGER, 'BASE_STA_PRO_ABOVE_COUNTY', BASE_STA_PRO_ABOVE_COUNTY, /NO_BLOCK, CLEANUP='ZS_PRO_SUM_cleanup'
+
+END
+
+;
+; EMPTY STUB PROCEDURE USED FOR AUTOLOADING.
+;
+PRO ZS_STA_PRO_ABOVE_COUNTY,GROUP_LEADER=WGROUP
+  common_log,'启动长势过程汇总'
+  COMMON COMMON_BASE,MENU_OPERATION,X_OFFSET,Y_OFFSET,BASE_TOP
+  BASE_STA_PRO_ABOVE_COUNTY_P, GROUP_LEADER=BASE_TOP
+END

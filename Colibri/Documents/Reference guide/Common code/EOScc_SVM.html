@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>EOScc_SVM</title></head>
+<body>&nbsp;&nbsp;&nbsp; <a href="../../../Reference%20Guide.html"><img style="border: 0px solid ; width: 200px; height: 130px;" alt="Colibri" title="Colibri" src="../../Logo/Colibri_full.png"></a>&nbsp;&gt; <a href="../Common%20Code.html">Common Code</a><br><h1 style="color: rgb(0, 0, 120);">EOScc_SVM</h1><a href="#Syntax">Syntax</a> | <a href="#Return_Value">Return Value</a> | <a href="#Arguments">Arguments</a> | <a href="#Keywords">Keywords</a> |&nbsp;<a href="#Version_History">Version History</a><br><p>This
+common procedure performs Support Vector Machine classification on a
+list of images by using a set of 'Regions Of Interest' (ROIs) as ground
+reference data.<br></p><h2 style="color: rgb(0, 0, 120);"><a name="Syntax"></a>Syntax</h2>EOScc_SVM, <a href="#pImageList"><span style="font-style: italic;">pImageList</span></a>, <a href="#pLibraries"><span style="font-style: italic;">pLibraries</span></a>, <a href="#Class_Dir"><span style="font-style: italic;">Class_Dir</span></a>, <a href="#ACLASS_NAMES">ACLASS_NAMES</a>=string array, <a href="#ACLASS_COLORS">ACLASS_COLORS</a>=array, <a href="#ABAND_NAMES">ABAND_NAMES</a>=string array [, <a href="#BANDSIX">BANDSIX</a>=array] [, <a href="#KERNEL_TYPE">KERNEL_TYPE</a>=value] [, <a href="#KERNEL_DEGREE">KERNEL_DEGREE</a>=value] [, <a href="#KERNEL_BIAS">KERNEL_BIAS</a>=value] [, <a href="#KERNEL_GAMMA">KERNEL_GAMMA</a>=value] [, <a href="#OSTATUS">OSTATUS</a>=object reference] [, /<a href="#OVERWRITE">OVERWRITE</a>] [, <a href="#PENALTY">PENALTY</a>=value] [, <a href="#PYRAMID_LEVELS">PYRAMID_LEVELS</a>=value] [, <a href="#PYRAMID_RECLASS_TRESH">PYRAMID_RECLASS_TRESH</a>=value] [, <a href="#RULE_DIR">RULE_DIR</a>=string] [, /<a href="#TIFF">TIFF</a>]&nbsp; [, <a href="#TRESH">TRESH</a>=value]<br><h2 style="color: rgb(0, 0, 120);"><a name="Return_Value"></a>Return Value</h2>None.<br><h2 style="color: rgb(0, 0, 120);"><a name="Arguments"></a>Arguments</h2><h3 style="color: rgb(0, 70, 200);"><a name="pImageList"></a>pImageList</h3>A pointer to a string or array of strings holding the path and name of the images to be classified.<br><h3 style="color: rgb(0, 70, 200);"><a name="pLibraries"></a>pLibraries</h3>A named variable that holds an array of pointers. Each pointer points to a structure array where each element has the structure:<br>&nbsp;&nbsp;&nbsp; {ImageFile:string, RoiId:value, Spectra:float array}<h3 style="color: rgb(0, 70, 200);"><a name="Class_Dir"></a>Class_Dir</h3>A string holding the full path to the directory where the output results have to be&nbsp;stored.<h2 style="color: rgb(0, 0, 120);"><a name="Keywords"></a>Keywords</h2><h3 style="color: rgb(0, 70, 200);"><a name="ACLASS_NAMES"></a>ACLASS_NAMES</h3>A named variable that holds an array of strings containing the class names for the available classes.<br><h3 style="color: rgb(0, 70, 200);"><a name="ACLASS_COLORS"></a>ACLASS_COLORS</h3>A named variable that holds an array of RGB color values containing the class colors for the available classes.<br><h3 style="color: rgb(0, 70, 200);"><a name="ABAND_NAMES"></a>ABAND_NAMES</h3>A named variable that holds an array of strings containing the names for the different bands of the rule image.<h3 style="color: rgb(0, 70, 200);"><a name="BANDSIX"></a>BANDSIX</h3>If present, an array of indices indicating the bands to be used in the classification. If not present all bands will be used.<h3 style="color: rgb(0, 70, 200);"><a name="KERNEL_TYPE"></a>KERNEL_TYPE</h3>Use this keyword to specify the type of kernel to use for the SVM classification. Allowable values are: <br><ul><li>0: Linear (default)</li><li>1: Polynomial</li><li>2: Radial Basis Function (RBF)&nbsp;</li><li>3: Sigmoid</li></ul><h3 style="color: rgb(0, 70, 200);"><a name="KERNEL_DEGREE"></a>KERNEL_DEGREE</h3>Use
+this keyword to specify the degree of kernel to use for the SVM
+classification. This keyword only applies if a polynomial kernel is
+selected. The default is 2. <h3 style="color: rgb(0, 70, 200);"><a name="KERNEL_BIAS"></a>KERNEL_BIAS</h3>Use
+this keyword to specify the kernel bias value to use for the SVM
+classification. This&nbsp;keyword only applies if a sigmoid or
+polynomial kernel is selected. The default is 1.<h3 style="color: rgb(0, 70, 200);"><a name="KERNEL_GAMMA"></a>KERNEL_GAMMA</h3>Use
+this keyword to specify the kernel gamma value to use for the SVM
+classification. This keyword is ignored if the kernel type is set to
+linear. The default is the inverse of the number of bands in the input
+image. <h3 style="color: rgb(0, 70, 200);"><a name="OSTATUS"></a>OSTATUS</h3>An object reference to an existing status window.<h3 style="color: rgb(0, 70, 200);"><a name="OVERWRITE"></a>OVERWRITE</h3>Set this keyword to overwrite already existing output files.<h3 style="color: rgb(0, 70, 200);"><a name="PENALTY"></a>PENALTY</h3>Use
+this keyword to specify the penalty parameter to use for the SVM
+classification. The default is 100. It is a floating point value
+greater than zero.<h3 style="color: rgb(0, 70, 200);"><a name="PYRAMID_LEVELS"></a>PYRAMID_LEVELS</h3>Use
+this keyword to specify the number of hierarchical resolution levels to
+process. This value is an integer value from 0 (no special processing),
+which implies the input image will only be processed at full
+resolution. If set to an integer larger than 0, this value will specify
+the number of pyramid levels that will be processed. The maximum value
+varies depending on the image size the user selects. It is determined
+by the criteria that the highest pyramid-level image is larger than
+64x64. For example, for an image size of 24000 x 24000, the maximum
+level available would be 8. The default is 0.<h3 style="color: rgb(0, 70, 200);"><a name="PYRAMID_RECLASS_TRESH"></a>PYRAMID_RECLASS_TRESH</h3>Use
+this keyword to specify the probability threshold which a pixel must
+meet to avoid being reclassified at a finer resolution. This keyword is
+ignored if PYRAMID_LEVELS is not set to a value greater than 0. This is
+a floating point value ranging between 0.0 and 1.0 (all pixels
+classified). The default value is 0.9.<h3 style="color: rgb(0, 70, 200);"><a name="RULE_DIR"></a>RULE_DIR</h3>If
+present, a string holding the output directory where the rule images
+need to be stored. The directory will be created if it is not yet
+existing. The classified images are named after the input image
+suffixed with '_rule'.<h3 style="color: rgb(0, 70, 200);"><a name="TIFF"></a>TIFF</h3>Set this keyword to output the classified images in tiff format.<h3 style="color: rgb(0, 70, 200);"><a name="TRESH"></a>TRESH</h3>Use
+this keyword to specify the minimum probability a pixel must have in
+order to be classified. Pixels with all class probabilities less than
+this threshold will not be classified. This value is a floating point
+value ranging between 0.0 (all pixels classified) and 1.0 (no pixels
+classified). The default is 0.0.<br><br><table style="text-align: left; width: 100%;" border="0" cellpadding="4" cellspacing="1"><tbody><tr><td style="background-color: rgb(226, 226, 226);"><span style="font-weight: bold;">Note</span><br>The SVM specific keywords were copied from the ENVI help file 'ENVI_SVM_DOIT'. </td></tr></tbody></table><h2 style="color: rgb(0, 0, 120);"><a name="Version_History"></a>Version History</h2><table style="text-align: left; width: 100px;" border="0" cellpadding="4" cellspacing="1"><tbody><tr><td style="background-color: rgb(213, 213, 222);"><span style="font-weight: bold;">Author</span></td><td style="background-color: rgb(213, 213, 222);"><span style="font-weight: bold;">Date</span></td><td style="background-color: rgb(213, 213, 222);"><span style="font-weight: bold;">Description</span></td></tr><tr><td style="background-color: rgb(226, 226, 226);"><a href="../Authors%20and%20Contributors.html">LBer</a></td><td style="white-space: nowrap; background-color: rgb(226, 226, 226);">January 2012</td><td style="background-color: rgb(226, 226, 226);">Created</td></tr></tbody></table></body></html>

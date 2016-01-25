@@ -1,0 +1,306 @@
+;
+; IDL Widget Interface Procedures. This Code is automatically
+;     generated and should not be modified.
+; Empty stub procedure used for autoloading.
+;
+;**************************************************************************
+;蒙继华
+;用户自定义监测区的定义\修改\增加\删除
+;2006.07.26
+;2006.07.28,对模块的界面进行了调整,并开始了代码的编写
+;首先开始的是数据读取功能
+;**************************************************************************
+
+pro CUSTOM_REGION_MANAGE_eventcb
+end
+;
+; Generated on:	07/05/2006 08:39.47
+FUNCTION READ_ROI,PSTATE
+
+	COMMON COMMON_BLOCK,YESORNO,DBOBJ,FILE_PATH,YEAR,DSN,USER_NAME,PWD,PROVINCE_CODE
+	;首先检测数据库的链接是否成功,如不成功则不进行读取
+	IF (YESORNO EQ 0) THEN BEGIN
+     	TEXT=DIALOG_MESSAGE('请先设置数据库链接!',TITLE='提示',/INFORMATION)
+     	CLOSE,/ALL
+     	RETURN,0
+    ENDIF
+    OD=DBOBJ
+
+	;进行查询
+	SQL = 'SELECT CODE,NAME FROM ROI_CODE ORDER BY clng(CODE)'	;ORDER BY clng(CODE)由杨绍锷添加，20070906
+	ORS = Obj_New('IDLdbRecordset', od, SQL=SQL)
+	;获取记录的条数
+	SQL_1='select count(*) from ('+Sql+')'
+	RecordNumOBJ = OBJ_NEW('IDLDBRECORDSET',DBobj,SQL=SQL_1)
+	RecordNum = RecordNumOBJ->GETFIELD(0)
+	TOTAL_COUNTY=RecordNum
+	Obj_Destroy,RecordNumOBJ
+	IF(ORS->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+		ROI_COUNT = 0
+		;修改了以前进行数据读取的程序,由WHILE变为了REPEAT
+		REPEAT BEGIN
+   			(*PSTATE).ARR_ROI[ROI_COUNT].CODE = ORS -> GETFIELD(0)
+		   	(*PSTATE).ARR_ROI[ROI_COUNT].NAME = ORS -> GETFIELD(1)
+		   	PRINT,ORS -> GETFIELD(1)
+		   	SQL = 'SELECT A.COUNTY_CODE,B.NAME FROM '
+			SQL = SQL+'COUNTY_TO_ROI A,COUNTY_CODE B '
+			SQL = SQL+'WHERE ( A.COUNTY_CODE=B.CODE AND '
+			SQL = SQL+'("A.ROI_CODE" = '+"'"+STRTRIM((*PSTATE).ARR_ROI[ROI_COUNT].CODE,2)+"' "+')'
+			SQL = SQL+')'
+			ORS_1 = Obj_New('IDLdbRecordset', od, SQL=SQL)
+			COUNTY_COUNT = 0
+
+			IF(ORS_1->MOVECURSOR(/FIRST) EQ 1)THEN BEGIN
+				REPEAT BEGIN
+	 				(*PSTATE).ARR_ROI[ROI_COUNT].ARR_COUNTY_CODE[COUNTY_COUNT] = ORS_1 -> GETFIELD(0)
+					(*PSTATE).ARR_ROI[ROI_COUNT].ARR_COUNTY_NAME[COUNTY_COUNT] = ORS_1 -> GETFIELD(1)
+					PRINT,'   ',ROI_COUNT,COUNTY_COUNT,ORS_1 -> GETFIELD(1)
+					COUNTY_COUNT=COUNTY_COUNT+1
+				ENDREP UNTIL (ORS_1->MOVECURSOR(/NEXT) NE 1)
+			ENDIF
+			Obj_Destroy,ORS_1
+
+			(*PSTATE).ARR_ROI[ROI_COUNT].NUM_COUNTY=COUNTY_COUNT
+			ROI_COUNT = ROI_COUNT+1
+		ENDREP UNTIL (ORS->MOVECURSOR(/NEXT) NE 1)
+		(*PSTATE).NUM_ROI_ALL=TOTAL_COUNTY
+		Obj_Destroy,ORS
+		RETURN,1
+	ENDIF ELSE BEGIN
+     	close,/all
+     	Obj_Destroy,ORS
+     	RETURN,0
+	ENDELSE
+END
+
+;
+PRO WID_BASE_CUSTOM_EVENT, EVENT
+
+  wTarget = (widget_info(Event.id,/NAME) eq 'TREE' ?  $
+      widget_info(Event.id, /tree_root) : event.id)
+
+  wWidget =  Event.top
+
+  COMMON COMMON_BLOCK,YESORNO,DBOBJ,FILE_PATH,YEAR,DSN,USER_NAME,PWD,PROVINCE_CODE
+  Widget_Control,event.top,get_uvalue = pstate
+  case wTarget of
+
+
+	Widget_Info(wWidget,FIND_BY_UNAME='WID_LIST_SOURCE'):begin
+		;点击一个自定义监测区时,显示该区内的所有县
+		LISTSOURCE = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_SOURCE')
+		INDEX_SEL = WIDGET_INFO(ListSource, /LIST_SELECT)
+		LISTTARGET = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_TARGET')
+		WIDGET_CONTROL,LISTTARGET,SET_VALUE=$
+			(*PSTATE).ARR_ROI[INDEX_SEL].ARR_COUNTY_NAME[0:(*PSTATE).ARR_ROI[INDEX_SEL].NUM_COUNTY-1]
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_REGION_DELETE'):begin
+		LISTSOURCE = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_SOURCE')
+		INDEX_SEL = WIDGET_INFO(ListSource, /LIST_SELECT)
+		INDEX_SEL =	INDEX_SEL[0]
+		IF INDEX_SEL EQ -1 THEN BEGIN
+			TEMP=DIALOG_MESSAGE('请选中要删除的自定义监测区!',TITLE='提示')
+			RETURN
+		ENDIF
+
+		;让用户确认监测区的删除
+		TEMP= DIALOG_MESSAGE('确定要删除该监测区么?',TITLE='提示',/QUESTION)
+		IF TEMP EQ 'No' THEN RETURN
+		PRINT,'确定删除'
+		ROI_CODE=(*PSTATE).ARR_ROI[INDEX_SEL].CODE
+		PRINT,ROI_CODE
+
+		;选删除COUNTY_TO_ROI中的相应数据
+		OD=DBOBJ
+		SQL='DELETE FROM COUNTY_TO_ROI WHERE ( "ROI_CODE" = '+"'"+ROI_CODE+"' "+')'
+  		OD->EXECUTESQL,SQL
+  		;再删除ROI_CODE中的相应数据
+		SQL='DELETE FROM ROI_CODE WHERE ( "CODE" = '+"'"+ROI_CODE+"' "+')'
+  		OD->EXECUTESQL,SQL
+
+		;重新读取数据
+		TEMP = READ_ROI(pstate)
+		LISTSOURCE = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_SOURCE')
+		LISTTARGET = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_TARGET')
+		WIDGET_CONTROL,LISTSOURCE,SET_VALUE=''
+		WIDGET_CONTROL,LISTTARGET,SET_VALUE=''
+		IF TEMP EQ 0 THEN BEGIN
+			TEXT=DIALOG_MESSAGE('数据库中没有自定义监测区!',TITLE='提示',/INFORMATION)
+			WIDGET_CONTROL,LISTSOURCE,SET_VALUE=''
+			WIDGET_CONTROL,LISTTARGET,SET_VALUE=''
+			(*PSTATE).NUM_ROI_ALL=0
+			RETURN
+		ENDIF
+		WIDGET_CONTROL,LISTSOURCE,SET_VALUE=(*PSTATE).ARR_ROI[0:(*PSTATE).NUM_ROI_ALL-1].NAME
+		RETURN
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_COUNTY_DELETE'):begin
+		TEMP=DIALOG_MESSAGE('开发中!',TITLE='提示')
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_REGION_NEW'):begin
+		SD_ROI_Creat, GROUP_LEADER=CUSTOM_REGION_MANAGE,_EXTRA=_VWBExtra_
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_COUNTY_ADD'):begin
+		;Widget_Control,event.top,get_uvalue=pstate
+		;REGION_COUNTY_ADD,(*pstate).F, GROUP_LEADER=CUSTOM_REGION_MANAGE
+		TEMP=DIALOG_MESSAGE('开发中!',TITLE='提示')
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_CANCEL'):begin
+		CLOSE,/ALL
+    	WIDGET_CONTROL, EVENT.TOP, /DESTROY
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_HELP'):begin
+
+		if file_test('HELP\HELP.chm') then begin
+			ONLINE_HELP, '监测区自定义', BOOK='HELP\HELP.chm', /FULL_PATH
+		endif else begin
+			info_help=dialog_message('找不到帮助文档',title='警告')
+		endelse
+
+;		ONLINE_HELP,  BOOK='HELP\HELP.chm', /FULL_PATH,'监测区自定义'
+	end
+
+	Widget_Info(wWidget,FIND_BY_UNAME='CMD_READ'):begin
+		TEMP = READ_ROI(pstate)
+		LISTSOURCE = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_SOURCE')
+		LISTTARGET = WIDGET_INFO(EVENT.TOP,FIND_BY_UNAME='WID_LIST_TARGET')
+		WIDGET_CONTROL,LISTSOURCE,SET_VALUE=''
+		WIDGET_CONTROL,LISTTARGET,SET_VALUE=''
+		IF TEMP EQ 0 THEN BEGIN
+			TEXT=DIALOG_MESSAGE('数据库中没有自定义监测区!',TITLE='提示',/INFORMATION)
+			WIDGET_CONTROL,LISTSOURCE,SET_VALUE=''
+			WIDGET_CONTROL,LISTTARGET,SET_VALUE=''
+			(*PSTATE).NUM_ROI_ALL=0
+			RETURN
+		ENDIF
+		WIDGET_CONTROL,LISTSOURCE,SET_VALUE=(*PSTATE).ARR_ROI[0:(*PSTATE).NUM_ROI_ALL-1].NAME
+	end
+
+    else:
+  endcase
+
+end
+
+pro WID_BASE_CUSTOM,GROUP_LEADER=wGroup, _EXTRA=_VWBExtra_
+
+IF ( XREGISTERED('WID_BASE_CUSTOM') NE 0 ) THEN RETURN
+
+  Resolve_Routine, 'CUSTOM_REGION_MANAGE_eventcb',/COMPILE_FULL_FILE  ; Load event callback routines
+
+  WID_BASE_CUSTOM = Widget_Base( GROUP_LEADER=wGroup, UNAME='WID_BASE_CUSTOM'  $
+      ,XOFFSET=250 ,YOFFSET=200 ,SCR_XSIZE=460 ,SCR_YSIZE=394  $
+      ,TITLE='自定义监测区管理' ,SPACE=3 ,XPAD=3 ,YPAD=3, TLB_FRAME_ATTR=1)
+
+  WID_BASE_1 = Widget_Base(WID_BASE_CUSTOM, UNAME='WID_BASE_1' ,FRAME=1  $
+      ,XOFFSET=5 ,YOFFSET=6 ,SCR_XSIZE=213 ,SCR_YSIZE=303  $
+      ,TITLE='IDL' ,SPACE=3 ,XPAD=3 ,YPAD=3)
+
+  WID_LABEL_0 = Widget_Label(WID_BASE_1, UNAME='WID_LABEL_0'  $
+      ,XOFFSET=6 ,YOFFSET=8 ,SCR_XSIZE=104 ,SCR_YSIZE=20  $
+      ,/ALIGN_LEFT ,VALUE='自定义监测区列表:')
+
+
+  WID_BUTTON_REGIONDELETE = Widget_Button(WID_BASE_1, UNAME='CMD_REGION_DELETE'  $
+      ,XOFFSET=10 ,YOFFSET=268 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+      ,/ALIGN_CENTER ,VALUE='删除')
+
+
+  WID_BUTTON_ADD = Widget_Button(WID_BASE_1, UNAME='CMD_REGION_NEW'  $
+      ,XOFFSET=143 ,YOFFSET=268 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+      ,/ALIGN_CENTER ,VALUE='添加')
+
+
+  WID_LIST_SOURCE = Widget_List(WID_BASE_1, UNAME='WID_LIST_SOURCE' ,FRAME=1  $
+      ,XOFFSET=5 ,YOFFSET=30 ,SCR_XSIZE=201 ,SCR_YSIZE=230 ,XSIZE=11  $
+      ,YSIZE=2)
+
+
+  WID_BASE_3 = Widget_Base(WID_BASE_CUSTOM, UNAME='WID_BASE_3' ,FRAME=1  $
+      ,XOFFSET=235 ,YOFFSET=6 ,SCR_XSIZE=213 ,SCR_YSIZE=303  $
+      ,TITLE='IDL' ,SPACE=3 ,XPAD=3 ,YPAD=3)
+
+  WID_LABEL_1 = Widget_Label(WID_BASE_3, UNAME='WID_LABEL_1'  $
+      ,XOFFSET=6 ,YOFFSET=8 ,SCR_XSIZE=104 ,SCR_YSIZE=20  $
+      ,/ALIGN_LEFT ,VALUE='监测区所属县列表:')
+
+  ;***********************************************************************************
+  ;修改于2006.12.4,由于开发时间紧,先去掉了对自定义监测区进行修改的功能
+  ;删除了这两个编辑按钮
+  ;蒙继华
+;  WID_BUTTON_COUNTYDELETE = Widget_Button(WID_BASE_3, UNAME='CMD_COUNTY_DELETE'  $
+;      ,XOFFSET=10 ,YOFFSET=268 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+;      ,/ALIGN_CENTER ,VALUE='删除')
+;
+;
+;  WID_BUTTON_COUNTYADD = Widget_Button(WID_BASE_3, UNAME='CMD_COUNTY_ADD'  $
+;      ,XOFFSET=143 ,YOFFSET=268 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+;      ,/ALIGN_CENTER ,VALUE='添加')
+  ;***********************************************************************************
+
+
+  WID_LIST_TARGET = Widget_List(WID_BASE_3, UNAME='WID_LIST_TARGET' ,FRAME=1  $
+      ,XOFFSET=5 ,YOFFSET=30 ,SCR_XSIZE=201 ,SCR_YSIZE=230+35 ,XSIZE=11  $
+      ,YSIZE=2,/MULTIPLE)
+
+
+  WID_BASE_2 = Widget_Base(WID_BASE_CUSTOM, UNAME='WID_BASE_2' ,FRAME=1  $
+      ,XOFFSET=5 ,YOFFSET=318 ,SCR_XSIZE=443 ,SCR_YSIZE=39  $
+      ,TITLE='IDL' ,SPACE=3 ,XPAD=3 ,YPAD=3)
+
+
+  WID_BUTTON_CANCEL = Widget_Button(WID_BASE_2, UNAME='CMD_CANCEL'  $
+      ,XOFFSET=350 ,YOFFSET=7 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+      ,/ALIGN_CENTER ,VALUE='关闭')
+
+
+  WID_BUTTON_HELP = Widget_Button(WID_BASE_2, UNAME='CMD_HELP'  $
+      ,XOFFSET= 189,YOFFSET=8 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+      ,/ALIGN_CENTER ,VALUE='帮助')
+
+
+  WID_BUTTON_OK = Widget_Button(WID_BASE_2, UNAME='CMD_READ'  $
+      ,XOFFSET=31 ,YOFFSET=8 ,SCR_XSIZE=60 ,SCR_YSIZE=23  $
+      ,/ALIGN_CENTER ,VALUE='读取数据')
+
+   	ONE_ROI = { $
+  		NAME	:	''	,$	;ROI NAME
+  		CODE	:	''	,$	;ROI CODE
+  		NUM_COUNTY	:	0	,$	;THE NUMBER OF COUNTIES IN A ROI
+  		ARR_COUNTY_CODE	:	STRARR(100)	,$	;COUNTY CODE OF ALL COUNTIES IN THE ROI
+  		ARR_COUNTY_NAME	:	STRARR(100)	$	;COUNTY NAME OF ALL COUNTIES IN THE ROI
+        }
+
+
+	STATE = { $
+
+        ARR_ROI			:    REPLICATE(ONE_ROI, 50),$
+        NUM_ROI_ALL		:	0,$
+        NUM_ROI_SEL		:	0,$
+        WID_BASE_CUSTOM	:	WID_BASE_CUSTOM $
+        }
+
+	pstate = ptr_new(state,/no_copy)
+	Widget_Control,WID_BASE_CUSTOM,set_uvalue = pstate
+
+
+
+  Widget_Control, /REALIZE, WID_BASE_CUSTOM
+  WIDGET_CONTROL,WID_BUTTON_CANCEL,/INPUT_FOCUS
+
+  XManager, 'WID_BASE_CUSTOM', WID_BASE_CUSTOM, /NO_BLOCK, cleanup='SD_Connect_cleanup'
+
+end
+;
+; Empty stub procedure used for autoloading.
+;
+pro SD_ROI_MANAGE, GROUP_LEADER=wGroup, _EXTRA=_VWBExtra_
+  COMMON COMMON_BASE,MENU_OPERATION,X_OFFSET,Y_OFFSET,BASE_TOP
+  WID_BASE_CUSTOM, GROUP_LEADER=BASE_TOP, _EXTRA=_VWBExtra_
+end
+
