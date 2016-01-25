@@ -27,11 +27,8 @@ PRO L8CALIBRATE
     print,'第',i+1,'景      ',outputfile
     Task.OUTPUT_RASTER_URI = outputfile
     
-    
-    output = File_Search(outputfile,ncount=ncount)
-    if ncount gt 0 then begin
-      print,outputfile+' is already exist'
-      break
+    if rad_FileCount1[0] gt 0 then begin
+      print,outname1+' is already exist'
     endif
     
     ; Define output raster URI

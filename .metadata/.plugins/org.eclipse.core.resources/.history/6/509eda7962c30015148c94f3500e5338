@@ -28,10 +28,9 @@ PRO L8CALIBRATE
     Task.OUTPUT_RASTER_URI = outputfile
     
     
-    output = File_Search(outputfile,ncount=ncount)
-    if ncount gt 0 then begin
-      print,outputfile+' is already exist'
-      break
+    output = File_Search(outputfile, '*_MTL.txt',/FOLD_CASE,count=count)
+    if rad_FileCount1[0] gt 0 then begin
+      print,outname1+' is already exist'
     endif
     
     ; Define output raster URI

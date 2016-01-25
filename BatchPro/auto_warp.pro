@@ -8,7 +8,7 @@ PRO Auto_WARP
 
   WarpFiles=FILE_SEARCH(inputPath,'*.tif',/FOLD_CASE,count=count)
   
-  print,'¹²',count,'    ¾°Ó°Ïñ¼¸ºÎĞ£Õı'
+  print,'å…±',count,'    æ™¯å½±åƒå‡ ä½•æ ¡æ­£'
   
   FOR i=0,count-1 DO BEGIN
   
@@ -21,35 +21,35 @@ PRO Auto_WARP
     BaseFile='D:\77211356\Data\GF\HuBei\basedata\TM8_8\ref\mosaic_121_122_123.tif'
     ;WarpFile='D:\77211356\Data\GF\HuBei\huanggang\20150122\GF1_WFV2_E115.9_N29.3_20150122_L1A0000606437\GF1_WFV2_E115.9_N29.3_20150122_L1A0000606437_rpc.tif'
     
-    ;´ò¿ª²Î¿¼Ó°Ïñ
+    ;æ‰“å¼€å‚è€ƒå½±åƒ
     envi_open_file, BaseFile, r_fid=base_fid
-    ;´ò¿ª´ı¾ÀÕıÓ°Ïñ
+    ;æ‰“å¼€å¾…çº æ­£å½±åƒ
     envi_open_file, WarpFile, r_fid=warp_fid
-    ;Èç¹ûÎª¿ÕÔò·µ»Ø
+    ;å¦‚æœä¸ºç©ºåˆ™è¿”å›
     if (base_fid eq -1 || warp_fid eq -1) then begin
       envi_batch_exit
       return
     endif
     
-    print,'µÚ',i+1,'¾°      ¿ªÊ¼¡­¡­¡­¡­',out_name
+    print,'ç¬¬',i+1,'æ™¯      å¼€å§‹â€¦â€¦â€¦â€¦',out_name
     
-    ;²¨¶ÎºÅ£¬0ÎªµÚÒ»²¨¶Î
+    ;æ³¢æ®µå·ï¼Œ0ä¸ºç¬¬ä¸€æ³¢æ®µ
     base_match_pos = 0L
-    ;²¨¶ÎºÅ£¬0ÎªµÚÒ»²¨¶Î
+    ;æ³¢æ®µå·ï¼Œ0ä¸ºç¬¬ä¸€æ³¢æ®µ
     warp_match_pos = 0L
-    ;¿ØÖÆµã¸öÊı£¬ÊÊÖĞ£¬GF-1Ò»Õû¾°Ó°ÏñÒ»°ã530¶à-750£¨²Î¿¼Ó°ÏñÎªTM8µÄÈ«É«£©
+    ;æ§åˆ¶ç‚¹ä¸ªæ•°ï¼Œé€‚ä¸­ï¼ŒGF-1ä¸€æ•´æ™¯å½±åƒä¸€èˆ¬530å¤š-750ï¼ˆå‚è€ƒå½±åƒä¸ºTM8çš„å…¨è‰²ï¼‰
     num_tie_points = 575
-    ;ÒÆ¶¯´°¿Ú£¬Ä¬ÈÏÎª11£¬ÖµÔ½´óÔ½×¼£¬Ê±¼äÔ½³¤
+    ;ç§»åŠ¨çª—å£ï¼Œé»˜è®¤ä¸º11ï¼Œå€¼è¶Šå¤§è¶Šå‡†ï¼Œæ—¶é—´è¶Šé•¿
     move_win = 11
-    ;ËÑË÷´°¿Ú£¬Ä¬ÈÏÎª81£¬ÖµÔ½´óÔ½×¼£¬Ê±¼äÔ½³¤
+    ;æœç´¢çª—å£ï¼Œé»˜è®¤ä¸º81ï¼Œå€¼è¶Šå¤§è¶Šå‡†ï¼Œæ—¶é—´è¶Šé•¿
     search_win = 255
-    ;ĞËÈ¤µãËÑË÷·¶Î§£¬ÖµÔ½´óÔ½×¼£¬Ê±¼äÔ½³¤
+    ;å…´è¶£ç‚¹æœç´¢èŒƒå›´ï¼Œå€¼è¶Šå¤§è¶Šå‡†ï¼Œæ—¶é—´è¶Šé•¿
     area_chip_size = 128L
-    ;Ä¬ÈÏÎª1£¬ÖµÔ½´óÔ½×¼£¬Ê±¼äÔ½³¤
+    ;é»˜è®¤ä¸º1ï¼Œå€¼è¶Šå¤§è¶Šå‡†ï¼Œæ—¶é—´è¶Šé•¿
     num_oversamples = 4
-    ;ÉèÖÃ¿ØÖÆµãÎÄ¼şÊä³öÂ·¾¶ÓëÎÄ¼şÃû
+    ;è®¾ç½®æ§åˆ¶ç‚¹æ–‡ä»¶è¾“å‡ºè·¯å¾„ä¸æ–‡ä»¶å
     out_tie_points_name = outPath+'\'+FILE_BASENAME(WarpFile,'.tif',/FOLD_CASE)+'_tile.pts'
-    print,'µÚ',i+1,'¾°      ¿ØÖÆµã²éÕÒ¿ªÊ¼£¬ÎÄ¼şÃû£º',out_tie_points_name
+    print,'ç¬¬',i+1,'æ™¯      æ§åˆ¶ç‚¹æŸ¥æ‰¾å¼€å§‹ï¼Œæ–‡ä»¶åï¼š',out_tie_points_name
     ;
     ; Perform the automatic tie point collection
     ;
@@ -65,13 +65,13 @@ PRO Auto_WARP
       area_chip_size=area_chip_size, $
   ;    in_tie_points_array=in_tie_points_array, $
       num_oversamples=num_oversamples, $
-      ;½«¿ØÖÆµãÊı×é¸³Öµµ½PTSÖĞ
+      ;å°†æ§åˆ¶ç‚¹æ•°ç»„èµ‹å€¼åˆ°PTSä¸­
       OUT_TIE_POINTS_ARRAY=pts,$
-      ;½«¿ØÖÆµãÎÄ¼şÊä³öµ½Ö¸¶¨ÎÄ¼ş¼Ğ
+      ;å°†æ§åˆ¶ç‚¹æ–‡ä»¶è¾“å‡ºåˆ°æŒ‡å®šæ–‡ä»¶å¤¹
       out_tie_points_name=out_tie_points_name
     
-    print,'µÚ',i+1,'¾°     ¿ØÖÆµã²éÕÒÍê±Ï !    ',out_name
-    ;´ı¾ÀÕıÓ°ÏñµÄfid 
+    print,'ç¬¬',i+1,'æ™¯     æ§åˆ¶ç‚¹æŸ¥æ‰¾å®Œæ¯• !    ',out_name
+    ;å¾…çº æ­£å½±åƒçš„fid 
     fid=warp_fid
     ;
     ; Set the DIMS and POS to keywords
@@ -94,12 +94,12 @@ PRO Auto_WARP
       method=2, out_name=out_name, $
       pts=pts,r_fid=r_fid  
       
-    print,'µÚ',i+1,'¾°Ó°Ïñ¼¸ºÎĞ£ÕıÍê±Ï£¡'
+    print,'ç¬¬',i+1,'æ™¯å½±åƒå‡ ä½•æ ¡æ­£å®Œæ¯•ï¼'
     ;
     ; Exit ENVI Classic
     ;
   ENDFOR
     
   ENVI_batch_EXIT
-  print,'È«²¿Ó°Ïñ¼¸ºÎĞ£ÕıÍê±Ï£¡'
+  print,'å…¨éƒ¨å½±åƒå‡ ä½•æ ¡æ­£å®Œæ¯•ï¼'
 END

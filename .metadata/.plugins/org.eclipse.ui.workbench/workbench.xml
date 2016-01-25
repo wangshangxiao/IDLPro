@@ -13,6 +13,7 @@
 <coolItem id="com.rsi.idldt.ui.textedit.toolbar" itemType="typeToolBarContribution" x="288" y="56"/>
 <coolItem id="com.rsi.idldt.ui.toolbar.debugTools" itemType="typeToolBarContribution" x="478" y="56"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="com.rsi.idldt.proeditor.ProEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 </coolbarLayout>
 <page aggregateWorkingSetId="Aggregate for window 1453391895043" focus="true" label="工作空间 － IDL">
@@ -39,7 +40,7 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="问题">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="问题">
 <expanded>
-<category IMemento.internal.id="警告（第 100 项，共 474 项）"/>
+<category IMemento.internal.id="警告（第 100 项，共 141 项）"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -152,6 +153,36 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro">
+<persistable path="/BatchPro/Task_rpcorthorectification.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="HJ_DN2RAD.pro" tooltip="BatchPro/HJ_DN2RAD.pro">
+<persistable path="/BatchPro/HJ_DN2RAD.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="MutiBandMaskBatch.pro" tooltip="BatchPro/MutiBandMaskBatch.pro">
+<persistable path="/BatchPro/MutiBandMaskBatch.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="mosaicbatch.pro" tooltip="BatchPro/mosaicbatch.pro">
+<persistable path="/BatchPro/mosaicbatch.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cal_mosaic.pro" tooltip="BatchPro/cal_mosaic.pro">
+<persistable path="/BatchPro/cal_mosaic.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="FileMosaic.pro" tooltip="BatchPro/FileMosaic.pro">
+<persistable path="/BatchPro/FileMosaic.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="auto_warp.pro" tooltip="BatchPro/auto_warp.pro">
+<persistable path="/BatchPro/auto_warp.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cal_calibration.pro" tooltip="BatchPro/cal_calibration.pro">
+<persistable path="/BatchPro/cal_calibration.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="quac_bath.pro" tooltip="BatchPro/quac_bath.pro">
+<persistable path="/BatchPro/quac_bath.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro">
+<persistable path="/BatchPro/l8calibrate.pro"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="MRT_BACTH_Abroad.pro" tooltip="MRT_BATCH/MRT_BACTH_Abroad.pro">
 <persistable path="/MRT_BATCH/MRT_BACTH_Abroad.pro"/>
 </file>
@@ -163,39 +194,6 @@
 </file>
 <file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="mad_view_run.pro" tooltip="D:\77211356\code\SVN_IDL\test\mad_view_run.pro">
 <persistable uri="file:/D:/77211356/code/SVN_IDL/test/mad_view_run.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro">
-<persistable path="/BatchPro/l8calibrate.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro">
-<persistable path="/BatchPro/Task_rpcorthorectification.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="uncompressingbatch.pro" tooltip="BatchPro/uncompressingbatch.pro">
-<persistable path="/BatchPro/uncompressingbatch.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="auto_warp.pro" tooltip="BatchPro/auto_warp.pro">
-<persistable path="/BatchPro/auto_warp.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cartprocessing__define.pro" tooltip="BatchPro/cartprocessing__define.pro">
-<persistable path="/BatchPro/cartprocessing__define.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="fileBandMix.pro" tooltip="fileBandMix/fileBandMix.pro">
-<persistable path="/fileBandMix/fileBandMix.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="fsc_color.pro" tooltip="fileBandMix/fsc_color.pro">
-<persistable path="/fileBandMix/fsc_color.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="progressbar.pro" tooltip="fileBandMix/progressbar.pro">
-<persistable path="/fileBandMix/progressbar.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="progressbar_example.pro" tooltip="fileBandMix/progressbar_example.pro">
-<persistable path="/fileBandMix/progressbar_example.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cw_bgroup.pro" tooltip="fileBandMix/cw_bgroup.pro">
-<persistable path="/fileBandMix/cw_bgroup.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="centertlb.pro" tooltip="fileBandMix/centertlb.pro">
-<persistable path="/fileBandMix/centertlb.pro"/>
 </file>
 </mruList>
 </workbench>

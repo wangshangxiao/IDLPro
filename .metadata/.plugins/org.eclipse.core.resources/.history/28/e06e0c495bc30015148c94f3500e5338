@@ -2,7 +2,7 @@ PRO QUAC_Bath
   ; Start the application
   e = ENVI(/HEADLESS)
   
-  inputPath='F:\HXFarm\TM\LC81180272014164LGN00'
+  inputPath='D:\HXData\TM\LC81180272015023LGN00'
   
   ; Open an input file
   Files = FILE_SEARCH(inputPath,'*_rc.dat',/FOLD_CASE,count=count)

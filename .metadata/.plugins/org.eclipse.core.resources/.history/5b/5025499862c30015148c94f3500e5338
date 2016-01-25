@@ -31,7 +31,7 @@ PRO L8CALIBRATE
     output = File_Search(outputfile,ncount=ncount)
     if ncount gt 0 then begin
       print,outputfile+' is already exist'
-      break
+      continue
     endif
     
     ; Define output raster URI

@@ -28,12 +28,6 @@ PRO L8CALIBRATE
     Task.OUTPUT_RASTER_URI = outputfile
     
     
-    output = File_Search(outputfile,ncount=ncount)
-    if ncount gt 0 then begin
-      print,outputfile+' is already exist'
-      break
-    endif
-    
     ; Define output raster URI
     ;Task.Output_Raster_URI = e.GetTemporaryFilename()
   

@@ -21,18 +21,11 @@ PRO L8CALIBRATE
     ; you do not need to specify it here.
     Task.Input_Raster = Raster[0] ; Bands 1-7
     Task.Output_Data_Type = 'Float'
-    Task.SCALE_FACTOR =0.10
     
     outputfile=outPath+'\'+FILE_BASENAME(File[i],'_MTL.txt',/FOLD_CASE)+'_rc.dat'
     print,'第',i+1,'景      ',outputfile
     Task.OUTPUT_RASTER_URI = outputfile
     
-    
-    output = File_Search(outputfile,ncount=ncount)
-    if ncount gt 0 then begin
-      print,outputfile+' is already exist'
-      break
-    endif
     
     ; Define output raster URI
     ;Task.Output_Raster_URI = e.GetTemporaryFilename()
