@@ -9,7 +9,7 @@ PRO L8CALIBRATE
 
   
 
-  File = File_Search('F:\HXFarm\TM', '*_MTL.txt',/FOLD_CASE,count=count)
+  File = File_Search('F:\HXFarm\TM\LC81180272014164LGN00', '*_MTL.txt',/FOLD_CASE,count=count)
   
   FOR i=0,count-1 DO BEGIN
     Raster = e.OpenRaster(File[i])
@@ -28,10 +28,10 @@ PRO L8CALIBRATE
     Task.OUTPUT_RASTER_URI = outputfile
     
     
-    output = File_Search(outputfile)
+    output = File_Search(outputfile,'*_rc.dat',/FOLD_CASE)
     
     fileCount1 = SIZE(output)
-    if fileCount1[0] gt 0 then begin
+    if count gt 0 then begin
       print,outputfile+' is already exist'
       break
     endif
