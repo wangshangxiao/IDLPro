@@ -27,20 +27,11 @@ PRO ENVITask_GramSchmidtPanSharpening
     Task.INPUT_LOW_RESOLUTION_RASTER = LOW_RESOLUTION_raster
     Task.INPUT_HIGH_RESOLUTION_RASTER = HIGH_RESOLUTION_raster
     Task.RESAMPLING ='Cubic Convolution'
-    Task.SENSOR ='landsat8_oli'
+    
     
     outputfile=LOW_RESOLUTION_Path+'\'+FILE_BASENAME(LOW_RESOLUTION_Files[i],'.dat',/FOLD_CASE)+'_sharpen.dat'
     ; Define outputs
     Task.OUTPUT_RASTER_URI = outputfile
-    
-    output = File_Search(outputfile)
-
-    fileCount1 = SIZE(output)
-    if fileCount1[0] gt 0 then begin
-      print,outputfile+' is already exist'
-      continue
-    endif
-    
     print,'The',i+1,'   scene      ',outputfile
     ; Run the task
     Task.Execute

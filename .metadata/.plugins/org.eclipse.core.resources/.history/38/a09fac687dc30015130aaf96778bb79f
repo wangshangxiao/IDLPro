@@ -38,7 +38,7 @@ PRO ENVITask_GramSchmidtPanSharpening
     fileCount1 = SIZE(output)
     if fileCount1[0] gt 0 then begin
       print,outputfile+' is already exist'
-      continue
+      break
     endif
     
     print,'The',i+1,'   scene      ',outputfile

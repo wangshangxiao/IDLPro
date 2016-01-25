@@ -9,7 +9,7 @@ PRO L8CALIBRATE
 
   
 
-  File = File_Search('D:\HXData\TM', '*_MTL.txt',/FOLD_CASE,count=count)
+  File = File_Search('F:\HXFarm\TM', '*_MTL.txt',/FOLD_CASE,count=count)
   
   FOR i=0,count-1 DO BEGIN
     Raster = e.OpenRaster(File[i])
@@ -33,7 +33,7 @@ PRO L8CALIBRATE
     fileCount1 = SIZE(output)
     if fileCount1[0] gt 0 then begin
       print,outputfile+' is already exist'
-      continue
+      break
     endif
     
     ; Define output raster URI

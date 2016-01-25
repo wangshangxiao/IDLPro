@@ -6,9 +6,9 @@ PRO ENVITask_GramSchmidtPanSharpening
 
   ; find the LOW_RESOLUTION Files
   LOW_RESOLUTION_Files = FILE_SEARCH(inputPath,'*_quac.dat',/FOLD_CASE,count=count)
-  print,'All ',count,'    scenes will sharpening'
+  print,'共',count,'    景影像进行融合'
   FOR i=0,count-1 DO BEGIN
-    LOW_RESOLUTION_raster = e.OpenRaster(LOW_RESOLUTION_Files[i])
+    LOW_RESOLUTION_raster = e.OpenRaster(LOW_RESOLUTION_Files)
     
     LOW_RESOLUTION_Path= file_dirname(LOW_RESOLUTION_Files[i])
     
@@ -24,26 +24,16 @@ PRO ENVITask_GramSchmidtPanSharpening
     Task = ENVITask('GramSchmidtPanSharpening')
   
     ; Define inputs
-    Task.INPUT_LOW_RESOLUTION_RASTER = LOW_RESOLUTION_raster
-    Task.INPUT_HIGH_RESOLUTION_RASTER = HIGH_RESOLUTION_raster
-    Task.RESAMPLING ='Cubic Convolution'
-    Task.SENSOR ='landsat8_oli'
+    Task.INPUT_LOW_RESOLUTION_RASTER = Subset
+    Task.INPUT_HIGH_RESOLUTION_RASTER = pan_raster
     
-    outputfile=LOW_RESOLUTION_Path+'\'+FILE_BASENAME(LOW_RESOLUTION_Files[i],'.dat',/FOLD_CASE)+'_sharpen.dat'
+    
+    outputfile=LOW_RESOLUTION_Path+'\'+FILE_BASENAME(HIGH_RESOLUTION_File,'.tif',/FOLD_CASE)+'_quac.dat'
     ; Define outputs
-    Task.OUTPUT_RASTER_URI = outputfile
-    
-    output = File_Search(outputfile)
-
-    fileCount1 = SIZE(output)
-    if fileCount1[0] gt 0 then begin
-      print,outputfile+' is already exist'
-      continue
-    endif
-    
-    print,'The',i+1,'   scene      ',outputfile
+    Task.OUTPUT_RASTER_URI = e.GetTemporaryFilename()
+    print,'第',i+1,'景      ',outputfile
     ; Run the task
     Task.Execute
   ENDFOR  
-  print,'All files Sharpening is OK!'
+  print,'Sharpening is OK!'
 END

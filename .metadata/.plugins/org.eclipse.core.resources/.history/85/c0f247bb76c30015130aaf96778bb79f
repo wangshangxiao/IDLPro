@@ -1,0 +1,54 @@
+PRO ENVITask_GramSchmidtPanSharpening
+  ; Start the application
+  e = ENVI(/HEADLESS)
+  
+  inputPath='D:\HXData\TM'
+
+  ; find the LOW_RESOLUTION Files
+  LOW_RESOLUTION_Files = FILE_SEARCH(inputPath,'*_quac.dat',/FOLD_CASE,count=count)
+  
+  LOW_RESOLUTION_raster = e.OpenRaster(LOW_RESOLUTION_Files)
+  
+  
+  
+  outPath= file_dirname(Files[i])
+  
+  ; find the HIGH_RESOLUTION Files
+  HIGH_RESOLUTION_File = FILE_SEARCH(inputPath,'*_B8.tif',/FOLD_CASE,count=count)
+  
+  HIGH_RESOLUTION_raster = e.OpenRaster(HIGH_RESOLUTION_File)
+
+  ; Process a spatial subset
+  ;Subset = ENVISubsetRaster(msi_raster, Sub_Rect=[600,200,799,399])
+
+  ; Get the task from the catalog of ENVITasks
+  Task = ENVITask('GramSchmidtPanSharpening')
+
+  ; Define inputs
+  Task.INPUT_LOW_RESOLUTION_RASTER = Subset
+  Task.INPUT_HIGH_RESOLUTION_RASTER = pan_raster
+
+  ; Define outputs
+  Task.OUTPUT_RASTER_URI = e.GetTemporaryFilename()
+
+  ; Run the task
+  Task.Execute
+
+  ; Get the data collection
+  DataColl = e.Data
+
+  ; Add the output to the data collection
+  DataColl.Add, Task.Output_Raster
+
+  ; Display the result, jump to a specific
+  ; coordinate, and flicker between the
+  ; original and pan-sharpened images
+  View1 = e.GetView()
+  Layer1 = View1.CreateLayer(msi_raster)
+  Layer2 = View1.CreateLayer(Task.Output_Raster)
+  Layer2.QUICK_STRETCH='linear 2%'
+  Portal = View1.CreatePortal()
+  View1.GoToLocation,482221.6000, 4428141.2000, /Map
+  View1.Zoom, 2.0
+  Portal.Animate, 2.0, /FLICKER
+END

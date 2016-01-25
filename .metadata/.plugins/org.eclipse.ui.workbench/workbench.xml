@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench version="2.0">
 <workbenchAdvisor/>
-<window height="1026" width="1696" x="-8" y="-8">
+<window height="788" maximized="true" width="1386" x="-8" y="-8">
 <fastViewData fastViewLocation="1024">
 <orientation position="512" view="org.eclipse.debug.ui.DebugView"/>
 </fastViewData>
@@ -13,18 +13,33 @@
 <coolItem id="com.rsi.idldt.ui.textedit.toolbar" itemType="typeToolBarContribution" x="288" y="56"/>
 <coolItem id="com.rsi.idldt.ui.toolbar.debugTools" itemType="typeToolBarContribution" x="478" y="56"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="com.rsi.idldt.proeditor.ProEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="com.rsi.idldt.proeditor.ProEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
 <page aggregateWorkingSetId="Aggregate for window 1453391895043" focus="true" label="工作空间 － IDL">
 <editors>
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" partName="l8calibrate.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/l8calibrate.pro" title="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/l8calibrate.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1171" selectionTopPixel="422"/>
+</editor>
+<editor id="com.rsi.idldt.proeditor.ProEditor" name="ENVITask_QUAC.pro" partName="ENVITask_QUAC.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/ENVITask_QUAC.pro" title="ENVITask_QUAC.pro" tooltip="BatchPro/ENVITask_QUAC.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/ENVITask_QUAC.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="857" selectionTopPixel="334"/>
+</editor>
+<editor activePart="true" focus="true" id="com.rsi.idldt.proeditor.ProEditor" name="ENVITask_gramschmidtpansharpening.pro" partName="ENVITask_gramschmidtpansharpening.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/ENVITask_gramschmidtpansharpening.pro" title="ENVITask_gramschmidtpansharpening.pro" tooltip="BatchPro/ENVITask_gramschmidtpansharpening.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/ENVITask_gramschmidtpansharpening.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1578" selectionTopPixel="507"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.ui.navigator.ProjectExplorer" partName="项目资源管理器">
@@ -39,9 +54,6 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="问题">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="问题">
-<expanded>
-<category IMemento.internal.id="警告（第 100 项，共 141 项）"/>
-</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -57,7 +69,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="com.rsi.idldt.ui.IDLPerspective">
+<perspectives activePart="com.rsi.idldt.proeditor.ProEditor" activePerspective="com.rsi.idldt.ui.IDLPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="com.rsi.idldt.internal.ui.IDLPerspectiveFactory" id="com.rsi.idldt.ui.IDLPerspective" label="IDL"/>
 <alwaysOnActionSet id="com.rsi.idldt.tasks.actionSets.Wizard"/>
@@ -115,7 +127,7 @@
 </folder>
 </info>
 <info part="com.rsi.idldt.HierarchyView" ratio="0.7" ratioLeft="700" ratioRight="300" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.68600684" ratioLeft="402" ratioRight="184" relationship="4" relative="left">
+<info folder="true" part="bottom" ratio="0.66825396" ratioLeft="421" ratioRight="209" relationship="4" relative="left">
 <folder activePageID="com.rsi.idldt.console.IDLConsoleView" appearance="2" expanded="2">
 <page content="com.rsi.idldt.console.IDLConsoleView" label="IDL控制台"/>
 <page content="com.rsi.idldt.ui.views.CommandHistoryView" label="历史命令"/>
@@ -136,7 +148,163 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/l8calibrate.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/ENVITask_QUAC.pro"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/ENVITask_gramschmidtpansharpening.pro"/>
+</editors>
+<item historyLabel="ENVITask_QUAC.pro" index="1">
+<position info="not_deleted" x="519" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="386" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="503" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1028" y="0"/>
+</item>
+<item historyLabel="ENVITask_QUAC.pro" index="1">
+<position info="not_deleted" x="519" y="0"/>
+</item>
+<item historyLabel="l8calibrate.pro" index="0">
+<position info="not_deleted" x="1004" y="178"/>
+</item>
+<item historyLabel="ENVITask_QUAC.pro" index="1">
+<position info="not_deleted" x="868" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1028" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1471" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="503" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="604" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="831" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="905" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="967" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1106" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="967" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1031" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1073" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1112" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1071" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1246" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1293" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1333" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1364" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1402" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1446" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1578" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1617" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1362" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1333" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1364" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1402" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1446" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1578" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1617" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1460" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1333" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1364" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1402" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1446" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="322" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="395" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1333" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1364" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1479" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1452" y="8"/>
+</item>
+<item historyLabel="ENVITask_QUAC.pro" index="1">
+<position info="not_deleted" x="857" y="0"/>
+</item>
+<item historyLabel="l8calibrate.pro" index="0">
+<position info="not_deleted" x="1171" y="0"/>
+</item>
+<item active="true" historyLabel="ENVITask_gramschmidtpansharpening.pro" index="2">
+<position info="not_deleted" x="1578" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -153,6 +321,18 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="ENVITask_gramschmidtpansharpening.pro" tooltip="BatchPro/ENVITask_gramschmidtpansharpening.pro">
+<persistable path="/BatchPro/ENVITask_gramschmidtpansharpening.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="ENVITask_rpcorthorectification.pro" tooltip="BatchPro/ENVITask_rpcorthorectification.pro">
+<persistable path="/BatchPro/ENVITask_rpcorthorectification.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="quac_bath.pro" tooltip="BatchPro/quac_bath.pro">
+<persistable path="/BatchPro/quac_bath.pro"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro">
+<persistable path="/BatchPro/l8calibrate.pro"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="Task_rpcorthorectification.pro" tooltip="BatchPro/Task_rpcorthorectification.pro">
 <persistable path="/BatchPro/Task_rpcorthorectification.pro"/>
 </file>
@@ -177,12 +357,6 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="cal_calibration.pro" tooltip="BatchPro/cal_calibration.pro">
 <persistable path="/BatchPro/cal_calibration.pro"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="quac_bath.pro" tooltip="BatchPro/quac_bath.pro">
-<persistable path="/BatchPro/quac_bath.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="l8calibrate.pro" tooltip="BatchPro/l8calibrate.pro">
-<persistable path="/BatchPro/l8calibrate.pro"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="MRT_BACTH_Abroad.pro" tooltip="MRT_BATCH/MRT_BACTH_Abroad.pro">
 <persistable path="/MRT_BATCH/MRT_BACTH_Abroad.pro"/>
 </file>
@@ -191,9 +365,6 @@
 </file>
 <file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="mean_shift_run.pro" tooltip="D:\77211356\code\SVN_IDL\test\mean_shift\mean_shift_run.pro">
 <persistable uri="file:/D:/77211356/code/SVN_IDL/test/mean_shift/mean_shift_run.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="mad_view_run.pro" tooltip="D:\77211356\code\SVN_IDL\test\mad_view_run.pro">
-<persistable uri="file:/D:/77211356/code/SVN_IDL/test/mad_view_run.pro"/>
 </file>
 </mruList>
 </workbench>

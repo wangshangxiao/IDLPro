@@ -32,15 +32,6 @@ PRO ENVITask_GramSchmidtPanSharpening
     outputfile=LOW_RESOLUTION_Path+'\'+FILE_BASENAME(LOW_RESOLUTION_Files[i],'.dat',/FOLD_CASE)+'_sharpen.dat'
     ; Define outputs
     Task.OUTPUT_RASTER_URI = outputfile
-    
-    output = File_Search(outputfile)
-
-    fileCount1 = SIZE(output)
-    if fileCount1[0] gt 0 then begin
-      print,outputfile+' is already exist'
-      continue
-    endif
-    
     print,'The',i+1,'   scene      ',outputfile
     ; Run the task
     Task.Execute
