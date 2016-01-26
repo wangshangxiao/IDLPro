@@ -13,5 +13,5 @@ MACROS_FLOATING_TOOLBAR_HEIGHT=58
 MACROS_FLOATING_TOOLBAR_WIDTH=132
 MACROS_FLOATING_TOOLBAR_X=25
 MACROS_FLOATING_TOOLBAR_Y=25
-coolItemsOrder=org.eclipse.ui.workbench.file\:com.rsi.idldt.ui.textedit.toolbar\:com.rsi.idldt.ui.toolbar.debugTools\:
+coolItemsOrder=org.eclipse.ui.workbench.file\:com.rsi.idldt.ui.textedit.toolbar\:com.rsi.idldt.ui.toolbar.debugTools
 eclipse.preferences.version=1
