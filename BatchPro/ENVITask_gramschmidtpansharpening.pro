@@ -1,8 +1,61 @@
+PRO DeleteDatData,InputPath
+  
+  Delete_Files = FILE_SEARCH(InputPath,'*.dat',/FOLD_CASE,count=count)
+  
+  IF count ne 0 then BEGIN
+    FOR i=0,count-1 DO BEGIN
+      ENVI_OPEN_FILE,Delete_Files[i],R_FID=fid
+      ENVI_FILE_QUERY,fid,nb=nb,DIMS=dims
+      ENVI_FILE_MNG,id=fid,/remove,/delete
+    ENDFOR
+  ENDIF
+  ENVI_BATCH_EXIT
+END
+
+
+PRO ConvertToGeoTIFF,InputFile
+  
+  ;InputFile='D:\HXFarm\TM\LC81180272015007LGN00\LC81180272015007LGN00_rc_quac_sharpen.dat'
+  
+  Input = File_Search(InputFile,count=count)
+  ncount=count
+  if ncount EQ 0 then begin
+    return
+  endif
+  
+  ENVI,/RESTORE_BASE_SAVE_FILES
+  ENVI_BATCH_INIT,LOG_FILE="C:\envi_Preprocessing.Log"
+  ENVI_OPEN_FILE,InputFile,R_FID=fid
+  ENVI_FILE_QUERY,fid,nb=nb,DIMS=dims
+  
+  InputPath=file_dirname(InputFile)
+  
+  OutputFile=InputPath+'\'+FILE_BASENAME(InputFile,'.dat',/FOLD_CASE)+'.tif'
+  
+  output = File_Search(OutputFile)
+
+  fileCount1 = SIZE(output)
+  if fileCount1[0] gt 0 then begin
+    print,outputfile+' is already exist'
+    ;delete the *.dat files
+    DeleteDatData,InputPath
+    return
+  endif
+  
+  ;do convert
+  ENVI_OUTPUT_TO_EXTERNAL_FORMAT,dims=dims,fid=fid,pos=INDGEN(nb),out_name=OutputFile,/TIFF
+  
+  ;delete the *.dat files
+  DeleteDatData,InputPath
+  
+END
+
+
 PRO ENVITask_GramSchmidtPanSharpening
   ; Start the application
   e = ENVI(/HEADLESS)
   
-  inputPath='F:\HXFarm\TM'
+  inputPath='D:\HXFarm\TM'
 
   ; find the LOW_RESOLUTION Files
   LOW_RESOLUTION_Files = FILE_SEARCH(inputPath,'*_quac.dat',/FOLD_CASE,count=count)
@@ -38,12 +91,16 @@ PRO ENVITask_GramSchmidtPanSharpening
     fileCount1 = SIZE(output)
     if fileCount1[0] gt 0 then begin
       print,outputfile+' is already exist'
+      ConvertToGeoTIFF,outputfile
       continue
     endif
     
-    print,'The',i+1,'   scene      ',outputfile
+    
     ; Run the task
     Task.Execute
+    print,'The',i+1,'   scene      ',outputfile
+    ;convertToGeoTIFF
+    ConvertToGeoTIFF,outputfile
   ENDFOR  
   print,'All files Sharpening is OK!'
 END
