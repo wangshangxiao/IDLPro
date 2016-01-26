@@ -2,7 +2,7 @@ PRO ENVITask_QUAC
   ; Start the application
   e = ENVI(/HEADLESS)
   
-  inputPath='F:\HXFarm\TM'
+  inputPath='D:\HXData\TM'
   
   ; Open an input file
   Files = FILE_SEARCH(inputPath,'*_rc.dat',/FOLD_CASE,count=count)
