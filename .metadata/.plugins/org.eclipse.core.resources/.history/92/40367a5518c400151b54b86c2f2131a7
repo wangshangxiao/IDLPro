@@ -55,7 +55,7 @@ PRO ENVITask_GramSchmidtPanSharpening
   ; Start the application
   e = ENVI(/HEADLESS)
   
-  inputPath='F:\HXFarm\TM'
+  inputPath='D:\HXFarm\TM'
 
   ; find the LOW_RESOLUTION Files
   LOW_RESOLUTION_Files = FILE_SEARCH(inputPath,'*_quac.dat',/FOLD_CASE,count=count)
@@ -95,13 +95,12 @@ PRO ENVITask_GramSchmidtPanSharpening
       continue
     endif
     
-    print,'The',i+1,'   scene      begin',outputfile
+    
     ; Run the task
     Task.Execute
-    print,'The',i+1,'   scene      sharpening over',outputfile
+    print,'The',i+1,'   scene      ',outputfile
     ;convertToGeoTIFF
     ConvertToGeoTIFF,outputfile
-    print,'The',i+1,'   scene      ConvertToGeoTIFF over',outputfile
   ENDFOR  
   print,'All files Sharpening is OK!'
 END

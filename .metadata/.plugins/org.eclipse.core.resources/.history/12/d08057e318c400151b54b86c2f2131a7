@@ -98,10 +98,9 @@ PRO ENVITask_GramSchmidtPanSharpening
     print,'The',i+1,'   scene      begin',outputfile
     ; Run the task
     Task.Execute
-    print,'The',i+1,'   scene      sharpening over',outputfile
+    print,'The',i+1,'   scene      begin',outputfile
     ;convertToGeoTIFF
     ConvertToGeoTIFF,outputfile
-    print,'The',i+1,'   scene      ConvertToGeoTIFF over',outputfile
   ENDFOR  
   print,'All files Sharpening is OK!'
 END

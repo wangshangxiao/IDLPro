@@ -18,10 +18,16 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor activePart="true" focus="true" id="com.rsi.idldt.proeditor.ProEditor" name="ENVITask_gramschmidtpansharpening.pro" partName="ENVITask_gramschmidtpansharpening.pro" path="D:/77211356/GitHub/IDLPro/BatchPro/ENVITask_gramschmidtpansharpening.pro" title="ENVITask_gramschmidtpansharpening.pro" tooltip="BatchPro/ENVITask_gramschmidtpansharpening.pro" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/BatchPro/ENVITask_gramschmidtpansharpening.pro"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2079" selectionTopPixel="1235"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.ui.navigator.ProjectExplorer" partName="项目资源管理器">
@@ -36,6 +42,9 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="问题">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="问题">
+<expanded>
+<category IMemento.internal.id="警告（40 项）"/>
+</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -51,7 +60,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="com.rsi.idldt.console.IDLConsoleView" activePerspective="com.rsi.idldt.ui.IDLPerspective">
+<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="com.rsi.idldt.ui.IDLPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="com.rsi.idldt.internal.ui.IDLPerspectiveFactory" id="com.rsi.idldt.ui.IDLPerspective" label="IDL"/>
 <alwaysOnActionSet id="com.rsi.idldt.tasks.actionSets.Wizard"/>
@@ -130,7 +139,20 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" path="/BatchPro/ENVITask_gramschmidtpansharpening.pro"/>
+</editors>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="ENVITask_gramschmidtpansharpening.pro" index="0">
+<position info="not_deleted" x="1407" y="0"/>
+</item>
+<item active="true" historyLabel="ENVITask_gramschmidtpansharpening.pro" index="0">
+<position info="not_deleted" x="2131" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -147,6 +169,9 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.systemExternalEditor" name="Version 0.5.zip" tooltip="DataPreprocess/Version 0.5.zip">
+<persistable path="/DataPreprocess/Version 0.5.zip"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="ENVITask_gramschmidtpansharpening.pro" tooltip="BatchPro/ENVITask_gramschmidtpansharpening.pro">
 <persistable path="/BatchPro/ENVITask_gramschmidtpansharpening.pro"/>
 </file>
@@ -188,9 +213,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="MRT_BATCH_CHINA.pro" tooltip="MRT_BATCH/MRT_BATCH_CHINA.pro">
 <persistable path="/MRT_BATCH/MRT_BATCH_CHINA.pro"/>
-</file>
-<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.rsi.idldt.proeditor.ProEditor" name="mean_shift_run.pro" tooltip="D:\77211356\code\SVN_IDL\test\mean_shift\mean_shift_run.pro">
-<persistable uri="file:/D:/77211356/code/SVN_IDL/test/mean_shift/mean_shift_run.pro"/>
 </file>
 </mruList>
 </workbench>

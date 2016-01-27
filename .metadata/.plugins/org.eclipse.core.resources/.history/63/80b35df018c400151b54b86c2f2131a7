@@ -101,7 +101,7 @@ PRO ENVITask_GramSchmidtPanSharpening
     print,'The',i+1,'   scene      sharpening over',outputfile
     ;convertToGeoTIFF
     ConvertToGeoTIFF,outputfile
-    print,'The',i+1,'   scene      ConvertToGeoTIFF over',outputfile
+    print,'The',i+1,'   scene      sharpening over',outputfile
   ENDFOR  
   print,'All files Sharpening is OK!'
 END
