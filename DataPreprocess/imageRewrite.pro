@@ -1,7 +1,7 @@
 pro imageRewrite1
 
-input='D:\ÉñÅ©¼Ü\½âÒëºó\¼ýÖñ\¼ýÖñÁÖpro.tif'
-chimageoutpath='D:\ÉñÅ©¼Ü\½âÒëºó\¼ýÖñ'
+input='D:\IDLData\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pro.tif'
+chimageoutpath='D:\ï¿½ï¿½Å©ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½'
 data=read_tiff(input,geotiff = geotiff)
 data = long(data)
 
@@ -22,26 +22,26 @@ END
 
 pro imageRewrite
 
-  ;5ÔÂ24ÈÕÌáÈ¡ÁÖµØ
+  ;5ï¿½ï¿½24ï¿½ï¿½ï¿½ï¿½È¡ï¿½Öµï¿½
   ;input='D:\77211356\Data\Hongxing\GF\VI_TIF_Sub\gf1_wfv3_e1279_n489_20130524_l2a0000118062_clip_geo_NDVI_Clip.tif'
   input='D:\77211356\Data\Hongxing\GF\class\isodata\iso0930_100class_1.tif'
   
-  ;7ÔÂ11ÈÕÌáÈ¡Â·¡¢·¿¡¢Ë®
+  ;7ï¿½ï¿½11ï¿½ï¿½ï¿½ï¿½È¡Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®
   ;input='D:\77211356\Data\Hongxing\GF\VI_TIF_Sub\gf1_wfv1_e1270_n480_20130711_l2a0000118108_clip_geo_NDVI.tif'
-  ;9.30ÌáÈ¡Ë®
+  ;9.30ï¿½ï¿½È¡Ë®
   ;input='D:\77211356\Data\Hongxing\GF\VI_TIF_Sub\gf1_wfv2_e1265_n476_20130930_l2a0000118099_clip_geo_NDVI.tif'
   chimageoutpath='D:\77211356\Data\Hongxing\GF\class\isodata'
   data=read_tiff(input,geotiff = geotiff)
   ;data = float(data)
   
-;  ;5,24ÁÖµØ
+;  ;5,24ï¿½Öµï¿½
   forest_index =where (data eq 2)
   ;print,forest_index
   data[forest_index]=1
   Noforest_index=where(data gt 2)
   data[Noforest_index]=0
   
-  ;7,11Â·¡¢·¿¡¢Ë®
+  ;7,11Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®
 ;  RoadHouseWater_index =where (data le 0.475)
 ;  print,n_elements(RoadHouseWater_index)
 ;  ;print,forest_index
@@ -57,7 +57,7 @@ pro imageRewrite
 ;  data[NoWater_index]=0
 
 
-;5,24¸ûµØ
+;5,24ï¿½ï¿½ï¿½
   ;crop_Index=where(data gt 0 and data le 0.52)
   ;data[crop_Index]=1
   ;NoCrop_Index=where(data eq 0 and data gt 0.52)
